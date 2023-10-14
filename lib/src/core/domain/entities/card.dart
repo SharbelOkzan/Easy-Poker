@@ -1,19 +1,12 @@
 import 'package:easy_poker/src/core/domain/entities/enums/card_index.dart';
 import 'package:easy_poker/src/core/domain/entities/enums/card_suit.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Card {
-  final CardSuit suit;
-  final CardIndex index;
+part 'card.freezed.dart';
 
-  Card({required this.suit, required this.index});
+@freezed
+class Card with _$Card {
+  factory Card({required CardSuit suit, required CardIndex index}) = _Card;
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Card && other.suit == suit && other.index == index;
-  }
-
-  @override
-  int get hashCode => suit.hashCode ^ index.hashCode;
+  factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
 }

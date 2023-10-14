@@ -1,8 +1,14 @@
-import 'package:easy_poker/src/core/domain/entities/card.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Player {
-  final List<Card> cards;
-  // final int _id;
+import 'card.dart';
 
-  Player({required this.cards});
+part 'player.freezed.dart';
+
+@freezed
+class Player with _$Player {
+  factory Player({
+    required List<Card> cards,
+  }) = _Player;
+
+  factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 }

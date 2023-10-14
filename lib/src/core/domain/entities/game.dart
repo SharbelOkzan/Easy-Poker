@@ -1,15 +1,18 @@
-import 'package:easy_poker/src/core/domain/entities/card.dart';
-import 'package:easy_poker/src/core/domain/entities/player.dart';
-import 'package:easy_poker/src/core/domain/entities/enums/game_status.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Game {
-  final List<Player> players;
-  final List<Card> deck;
-  final GameStatus status;
-  Game({
-    required this.players,
-    required this.deck,
-    required this.status,
-  });
+import 'card.dart';
+import 'enums/game_status.dart';
+import 'player.dart';
+
+part 'game.freezed.dart';
+
+@freezed
+class Game with _$Game {
+  factory Game({
+    required List<Player> players,
+    required List<Card> deck,
+    required GameStatus status,
+  }) = _Game;
+
+  factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
 }
