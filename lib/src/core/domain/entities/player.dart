@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'card.dart';
 
 part 'player.freezed.dart';
+part 'player.g.dart';
 
 @freezed
 class Player with _$Player {

@@ -3,6 +3,7 @@ import 'package:easy_poker/src/core/domain/entities/enums/card_suit.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'card.freezed.dart';
+part 'card.g.dart';
 
 @freezed
 class Card with _$Card {

@@ -5,6 +5,7 @@ import 'enums/game_status.dart';
 import 'player.dart';
 
 part 'game.freezed.dart';
+part 'game.g.dart';
 
 @freezed
 class Game with _$Game {
