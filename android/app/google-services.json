@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1017967350226",
+    "project_id": "easy-poker-ad042",
+    "storage_bucket": "easy-poker-ad042.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017967350226:android:614944c75dc7d874f4380b",
+        "android_client_info": {
+          "package_name": "com.example.easy_poker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvKKqpu-D1wRfKP4LW9y-2T_sZ81wLR3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
