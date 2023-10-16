@@ -8,6 +8,7 @@ part 'player.g.dart';
 @freezed
 class Player with _$Player {
   factory Player({
+    required int id,
     required List<Card> cards,
   }) = _Player;
 

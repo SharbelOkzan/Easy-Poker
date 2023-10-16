@@ -20,6 +20,7 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Player {
+  int get id => throw _privateConstructorUsedError;
   List<Card> get cards => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -32,7 +33,7 @@ abstract class $PlayerCopyWith<$Res> {
   factory $PlayerCopyWith(Player value, $Res Function(Player) then) =
       _$PlayerCopyWithImpl<$Res, Player>;
   @useResult
-  $Res call({List<Card> cards});
+  $Res call({int id, List<Card> cards});
 }
 
 /// @nodoc
@@ -48,9 +49,14 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? cards = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       cards: null == cards
           ? _value.cards
           : cards // ignore: cast_nullable_to_non_nullable
@@ -66,7 +72,7 @@ abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
       __$$PlayerImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Card> cards});
+  $Res call({int id, List<Card> cards});
 }
 
 /// @nodoc
@@ -80,9 +86,14 @@ class __$$PlayerImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? cards = null,
   }) {
     return _then(_$PlayerImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       cards: null == cards
           ? _value._cards
           : cards // ignore: cast_nullable_to_non_nullable
@@ -94,11 +105,14 @@ class __$$PlayerImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$PlayerImpl implements _Player {
-  _$PlayerImpl({required final List<Card> cards}) : _cards = cards;
+  _$PlayerImpl({required this.id, required final List<Card> cards})
+      : _cards = cards;
 
   factory _$PlayerImpl.fromJson(Map<String, dynamic> json) =>
       _$$PlayerImplFromJson(json);
 
+  @override
+  final int id;
   final List<Card> _cards;
   @override
   List<Card> get cards {
@@ -109,7 +123,7 @@ class _$PlayerImpl implements _Player {
 
   @override
   String toString() {
-    return 'Player(cards: $cards)';
+    return 'Player(id: $id, cards: $cards)';
   }
 
   @override
@@ -117,13 +131,14 @@ class _$PlayerImpl implements _Player {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PlayerImpl &&
+            (identical(other.id, id) || other.id == id) &&
             const DeepCollectionEquality().equals(other._cards, _cards));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_cards));
+      Object.hash(runtimeType, id, const DeepCollectionEquality().hash(_cards));
 
   @JsonKey(ignore: true)
   @override
@@ -140,10 +155,13 @@ class _$PlayerImpl implements _Player {
 }
 
 abstract class _Player implements Player {
-  factory _Player({required final List<Card> cards}) = _$PlayerImpl;
+  factory _Player({required final int id, required final List<Card> cards}) =
+      _$PlayerImpl;
 
   factory _Player.fromJson(Map<String, dynamic> json) = _$PlayerImpl.fromJson;
 
+  @override
+  int get id;
   @override
   List<Card> get cards;
   @override

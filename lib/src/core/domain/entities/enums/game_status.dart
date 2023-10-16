@@ -1,3 +1,5 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../player.dart';
 
 sealed class GameStatus {
@@ -5,7 +7,8 @@ sealed class GameStatus {
   factory GameStatus.fromJson(Map<String, dynamic> json) {
     switch (json['subtype']) {
       case "game_running":
-        return GameRunning();
+        int playerinTurnId = json["player_in_turn_id"];
+        return GameRunning(playerInTurnId: playerinTurnId);
       case "game_ended":
         Player winner = Player.fromJson(json['player']);
         Player looser = Player.fromJson(json['looser']);
@@ -29,6 +32,7 @@ sealed class GameStatus {
 
     switch (this) {
       case GameRunning():
+        json['player_in_turn_id'] = (this as GameRunning).playerInTurnId;
       case GameEnded():
         json['winner'] = (this as GameEnded).winner;
         json['looser'] = (this as GameEnded).looser;
@@ -37,7 +41,20 @@ sealed class GameStatus {
   }
 }
 
-class GameRunning extends GameStatus {}
+class GameRunning extends GameStatus {
+  final int? playerInTurnId;
+
+  GameRunning({required this.playerInTurnId});
+
+  GameRunning copyWith({
+    int? Function()? playerInTurnId,
+  }) {
+    return GameRunning(
+      playerInTurnId:
+          playerInTurnId != null ? playerInTurnId() : this.playerInTurnId,
+    );
+  }
+}
 
 class GameEnded extends GameStatus {
   final Player winner;
