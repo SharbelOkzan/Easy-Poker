@@ -20,9 +20,12 @@ Game _$GameFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Game {
-  List<Player> get players => throw _privateConstructorUsedError;
+  Player get player1 => throw _privateConstructorUsedError;
+  Player get player2 => throw _privateConstructorUsedError;
   List<Card> get deck => throw _privateConstructorUsedError;
   GameStatus get status => throw _privateConstructorUsedError;
+  List<int> get selectedCardsForExchangeIndecies =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +37,15 @@ abstract class $GameCopyWith<$Res> {
   factory $GameCopyWith(Game value, $Res Function(Game) then) =
       _$GameCopyWithImpl<$Res, Game>;
   @useResult
-  $Res call({List<Player> players, List<Card> deck, GameStatus status});
+  $Res call(
+      {Player player1,
+      Player player2,
+      List<Card> deck,
+      GameStatus status,
+      List<int> selectedCardsForExchangeIndecies});
+
+  $PlayerCopyWith<$Res> get player1;
+  $PlayerCopyWith<$Res> get player2;
 }
 
 /// @nodoc
@@ -50,15 +61,21 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? players = null,
+    Object? player1 = null,
+    Object? player2 = null,
     Object? deck = null,
     Object? status = null,
+    Object? selectedCardsForExchangeIndecies = null,
   }) {
     return _then(_value.copyWith(
-      players: null == players
-          ? _value.players
-          : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
+      player1: null == player1
+          ? _value.player1
+          : player1 // ignore: cast_nullable_to_non_nullable
+              as Player,
+      player2: null == player2
+          ? _value.player2
+          : player2 // ignore: cast_nullable_to_non_nullable
+              as Player,
       deck: null == deck
           ? _value.deck
           : deck // ignore: cast_nullable_to_non_nullable
@@ -67,7 +84,27 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as GameStatus,
+      selectedCardsForExchangeIndecies: null == selectedCardsForExchangeIndecies
+          ? _value.selectedCardsForExchangeIndecies
+          : selectedCardsForExchangeIndecies // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PlayerCopyWith<$Res> get player1 {
+    return $PlayerCopyWith<$Res>(_value.player1, (value) {
+      return _then(_value.copyWith(player1: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PlayerCopyWith<$Res> get player2 {
+    return $PlayerCopyWith<$Res>(_value.player2, (value) {
+      return _then(_value.copyWith(player2: value) as $Val);
+    });
   }
 }
 
@@ -78,7 +115,17 @@ abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
       __$$GameImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Player> players, List<Card> deck, GameStatus status});
+  $Res call(
+      {Player player1,
+      Player player2,
+      List<Card> deck,
+      GameStatus status,
+      List<int> selectedCardsForExchangeIndecies});
+
+  @override
+  $PlayerCopyWith<$Res> get player1;
+  @override
+  $PlayerCopyWith<$Res> get player2;
 }
 
 /// @nodoc
@@ -91,15 +138,21 @@ class __$$GameImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? players = null,
+    Object? player1 = null,
+    Object? player2 = null,
     Object? deck = null,
     Object? status = null,
+    Object? selectedCardsForExchangeIndecies = null,
   }) {
     return _then(_$GameImpl(
-      players: null == players
-          ? _value._players
-          : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
+      player1: null == player1
+          ? _value.player1
+          : player1 // ignore: cast_nullable_to_non_nullable
+              as Player,
+      player2: null == player2
+          ? _value.player2
+          : player2 // ignore: cast_nullable_to_non_nullable
+              as Player,
       deck: null == deck
           ? _value._deck
           : deck // ignore: cast_nullable_to_non_nullable
@@ -108,31 +161,34 @@ class __$$GameImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as GameStatus,
+      selectedCardsForExchangeIndecies: null == selectedCardsForExchangeIndecies
+          ? _value._selectedCardsForExchangeIndecies
+          : selectedCardsForExchangeIndecies // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$GameImpl implements _Game {
+class _$GameImpl extends _Game {
   _$GameImpl(
-      {required final List<Player> players,
+      {required this.player1,
+      required this.player2,
       required final List<Card> deck,
-      required this.status})
-      : _players = players,
-        _deck = deck;
+      required this.status,
+      required final List<int> selectedCardsForExchangeIndecies})
+      : _deck = deck,
+        _selectedCardsForExchangeIndecies = selectedCardsForExchangeIndecies,
+        super._();
 
   factory _$GameImpl.fromJson(Map<String, dynamic> json) =>
       _$$GameImplFromJson(json);
 
-  final List<Player> _players;
   @override
-  List<Player> get players {
-    if (_players is EqualUnmodifiableListView) return _players;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_players);
-  }
-
+  final Player player1;
+  @override
+  final Player player2;
   final List<Card> _deck;
   @override
   List<Card> get deck {
@@ -143,10 +199,18 @@ class _$GameImpl implements _Game {
 
   @override
   final GameStatus status;
+  final List<int> _selectedCardsForExchangeIndecies;
+  @override
+  List<int> get selectedCardsForExchangeIndecies {
+    if (_selectedCardsForExchangeIndecies is EqualUnmodifiableListView)
+      return _selectedCardsForExchangeIndecies;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_selectedCardsForExchangeIndecies);
+  }
 
   @override
   String toString() {
-    return 'Game(players: $players, deck: $deck, status: $status)';
+    return 'Game(player1: $player1, player2: $player2, deck: $deck, status: $status, selectedCardsForExchangeIndecies: $selectedCardsForExchangeIndecies)';
   }
 
   @override
@@ -154,18 +218,24 @@ class _$GameImpl implements _Game {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GameImpl &&
-            const DeepCollectionEquality().equals(other._players, _players) &&
+            (identical(other.player1, player1) || other.player1 == player1) &&
+            (identical(other.player2, player2) || other.player2 == player2) &&
             const DeepCollectionEquality().equals(other._deck, _deck) &&
-            (identical(other.status, status) || other.status == status));
+            (identical(other.status, status) || other.status == status) &&
+            const DeepCollectionEquality().equals(
+                other._selectedCardsForExchangeIndecies,
+                _selectedCardsForExchangeIndecies));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_players),
+      player1,
+      player2,
       const DeepCollectionEquality().hash(_deck),
-      status);
+      status,
+      const DeepCollectionEquality().hash(_selectedCardsForExchangeIndecies));
 
   @JsonKey(ignore: true)
   @override
@@ -181,20 +251,27 @@ class _$GameImpl implements _Game {
   }
 }
 
-abstract class _Game implements Game {
+abstract class _Game extends Game {
   factory _Game(
-      {required final List<Player> players,
+      {required final Player player1,
+      required final Player player2,
       required final List<Card> deck,
-      required final GameStatus status}) = _$GameImpl;
+      required final GameStatus status,
+      required final List<int> selectedCardsForExchangeIndecies}) = _$GameImpl;
+  _Game._() : super._();
 
   factory _Game.fromJson(Map<String, dynamic> json) = _$GameImpl.fromJson;
 
   @override
-  List<Player> get players;
+  Player get player1;
+  @override
+  Player get player2;
   @override
   List<Card> get deck;
   @override
   GameStatus get status;
+  @override
+  List<int> get selectedCardsForExchangeIndecies;
   @override
   @JsonKey(ignore: true)
   _$$GameImplCopyWith<_$GameImpl> get copyWith =>

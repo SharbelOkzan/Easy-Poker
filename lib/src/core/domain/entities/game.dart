@@ -10,10 +10,14 @@ part 'game.g.dart';
 @freezed
 class Game with _$Game {
   factory Game({
-    required List<Player> players,
+    required Player player1,
+    required Player player2,
     required List<Card> deck,
     required GameStatus status,
+    required List<int> selectedCardsForExchangeIndecies,
   }) = _Game;
+
+  Game._();
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
 }
