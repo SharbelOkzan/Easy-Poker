@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'card.dart';
-import 'enums/game_status.dart';
+import 'enums/game_phase.dart';
 import 'player.dart';
 
 part 'game.freezed.dart';
@@ -13,7 +13,7 @@ class Game with _$Game {
     required Player player1,
     required Player player2,
     required List<Card> deck,
-    required GameStatus status,
+    required GamePhase phase,
     required List<int> selectedCardsForExchangeIndecies,
   }) = _Game;
 

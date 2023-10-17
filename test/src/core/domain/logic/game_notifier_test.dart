@@ -1,4 +1,4 @@
-import 'package:easy_poker/src/core/domain/entities/enums/game_status.dart';
+import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
 import 'package:easy_poker/src/core/domain/entities/game.dart';
 import 'package:easy_poker/src/core/domain/entities/player.dart';
 import 'package:easy_poker/src/core/presentation/notifiers/game_notifier.dart';
@@ -67,47 +67,41 @@ void main() {
     // verify that first player in-turn and their cards are exposed by `cardsToShow`
     verify(listener.callMockIgnoreParams()).called(1);
     verifyNoMoreInteractions(listener);
-    expect(container.read(gameProvider).status, isA<GameRunning>());
-    expect((container.read(gameProvider).status as GameRunning).playerInTurnId,
-        equals(1));
+    expect(container.read(gameProvider).phase, isA<FirstPlayerTurnPhase>());
     var listEquality = listEquals(
         container.read(gameProvider.notifier).cardsToShow,
         container.read(gameProvider).player1.cards);
     expect(listEquality, true);
 
     // end phase
-    container.read(gameProvider.notifier).endPlayerTurn();
+    container.read(gameProvider.notifier).endCurrentGamePhase();
 
     // verify that no player's cards are exposed
     verify(listener.callMockIgnoreParams()).called(1);
     verifyNoMoreInteractions(listener);
-    expect(container.read(gameProvider).status, isA<GameRunning>());
-    expect((container.read(gameProvider).status as GameRunning).playerInTurnId,
-        isNull);
+    expect(container.read(gameProvider).phase, isA<BetweenTurnsPhase>());
     listEquality =
         listEquals(container.read(gameProvider.notifier).cardsToShow, null);
     expect(listEquality, true);
 
     // end phase
-    container.read(gameProvider.notifier).endPlayerTurn();
+    container.read(gameProvider.notifier).endCurrentGamePhase();
 
     // verify second player in-turn and their cards are exposed by `cardsToShow`
     verify(listener.callMockIgnoreParams()).called(1);
     verifyNoMoreInteractions(listener);
-    expect(container.read(gameProvider).status, isA<GameRunning>());
-    expect((container.read(gameProvider).status as GameRunning).playerInTurnId,
-        equals(2));
+    expect(container.read(gameProvider).phase, isA<SecondPlayerTurnPhase>());
     listEquality = listEquals(container.read(gameProvider.notifier).cardsToShow,
         container.read(gameProvider).player2.cards);
     expect(listEquality, true);
 
     // end phase
-    container.read(gameProvider.notifier).endPlayerTurn();
+    container.read(gameProvider.notifier).endCurrentGamePhase();
 
     // verify that the game has ended
     verify(listener.callMockIgnoreParams()).called(1);
     verifyNoMoreInteractions(listener);
-    expect(container.read(gameProvider).status, isA<GameEnded>());
+    expect(container.read(gameProvider).phase, isA<GameEndedPhase>());
   });
 
   test("full house beats pair", () {
@@ -124,7 +118,7 @@ void main() {
       player1: player1,
       player2: player2,
       selectedCardsForExchangeIndecies: [],
-      status: GameRunning(playerInTurnId: 2),
+      phase: SecondPlayerTurnPhase(),
     );
     container.read(gameProvider.notifier).state = game;
 
@@ -137,10 +131,10 @@ void main() {
     verify(listener.callMockIgnoreParams()).called(1);
     verifyNoMoreInteractions(listener);
 
-    container.read(gameProvider.notifier).endPlayerTurn();
+    container.read(gameProvider.notifier).endCurrentGamePhase();
 
-    expect(container.read(gameProvider).status, isA<GameEnded>());
-    expect((container.read(gameProvider).status as GameEnded).winner,
+    expect(container.read(gameProvider).phase, isA<GameEndedPhase>());
+    expect((container.read(gameProvider).phase as GameEndedPhase).winner,
         equals(player1));
   });
 }

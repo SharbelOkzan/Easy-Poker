@@ -1,4 +1,4 @@
-import 'package:easy_poker/src/core/domain/entities/enums/game_status.dart';
+import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
 import 'package:easy_poker/src/core/domain/entities/game.dart';
 import 'package:easy_poker/src/core/domain/entities/player.dart';
 import 'package:easy_poker/src/service_locator.dart';
@@ -31,13 +31,11 @@ class GameNotifier extends Notifier<Game> {
         _getShuffeledDeck = getShuffeledDeck;
 
   Player? get _playerInTurn {
-    if (state.status is GameRunning) {
-      if ((state.status as GameRunning).playerInTurnId == state.player1.id) {
-        return state.player1;
-      }
-      if ((state.status as GameRunning).playerInTurnId == state.player2.id) {
-        return state.player2;
-      }
+    if (state.phase is FirstPlayerTurnPhase) {
+      return state.player1;
+    }
+    if (state.phase is SecondPlayerTurnPhase) {
+      return state.player2;
     }
     return null;
   }
@@ -58,7 +56,7 @@ class GameNotifier extends Notifier<Game> {
         player1: player1,
         player2: player2,
         deck: deck,
-        status: GameRunning(playerInTurnId: 1),
+        phase: FirstPlayerTurnPhase(),
         selectedCardsForExchangeIndecies: []);
     return game;
   }
@@ -80,8 +78,8 @@ class GameNotifier extends Notifier<Game> {
     if (_playerInTurn == null) {
       return;
     }
-    List<Card> updatedHand = _playerInTurn!.cards;
-    List<Card> updatedDeck = state.deck;
+    List<Card> updatedHand = List.from(_playerInTurn!.cards);
+    List<Card> updatedDeck = List.from(state.deck);
     for (int cardToExchangeIndex in state.selectedCardsForExchangeIndecies) {
       (updatedDeck, updatedHand) = _exchangeCard((
         deck: updatedDeck,
@@ -103,27 +101,24 @@ class GameNotifier extends Notifier<Game> {
   }
 
   // TODO to endCurrentGamePhase and introduce an enum for possible game phases
-  endPlayerTurn() {
-    GameStatus newGameStatus;
-    // player1 turn ==> nullify the turn until the
-    // players hands over the phone to the other player
-    if (_playerInTurn == state.player1) {
-      newGameStatus =
-          (state.status as GameRunning).copyWith(playerInTurnId: () => null);
-      // no one's turn ==> start player2 turn
-    } else if (_playerInTurn == null) {
-      newGameStatus =
-          (state.status as GameRunning).copyWith(playerInTurnId: () => 2);
-      // player2 turn ==> game is over, show results
-    } else if (_playerInTurn == state.player2) {
-      Player winner, looser;
-      (winner: winner, looser: looser) =
-          _calculateGameResults((state.player1, state.player2));
-      newGameStatus = GameEnded(winner: winner, looser: looser);
-    } else {
-      throw "Should not be possible";
+  endCurrentGamePhase() {
+    OfflineGamePhase newGamePhase;
+
+    switch ((state.phase) as OfflineGamePhase) {
+      case FirstPlayerTurnPhase():
+        newGamePhase = BetweenTurnsPhase();
+      case BetweenTurnsPhase():
+        newGamePhase = SecondPlayerTurnPhase();
+      case SecondPlayerTurnPhase():
+        Player winner, looser;
+        (winner: winner, looser: looser) =
+            _calculateGameResults((state.player1, state.player2));
+        newGamePhase = GameEndedPhase(winner: winner, looser: looser);
+      case GameEndedPhase():
+        // TODO: maybe implement restart?
+        throw "TODO";
     }
-    state = state.copyWith(status: newGameStatus);
+    state = state.copyWith(phase: newGamePhase);
   }
 
   startSecondPlayerTurn() {}

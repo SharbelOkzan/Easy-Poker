@@ -23,7 +23,7 @@ mixin _$Game {
   Player get player1 => throw _privateConstructorUsedError;
   Player get player2 => throw _privateConstructorUsedError;
   List<Card> get deck => throw _privateConstructorUsedError;
-  GameStatus get status => throw _privateConstructorUsedError;
+  GamePhase get phase => throw _privateConstructorUsedError;
   List<int> get selectedCardsForExchangeIndecies =>
       throw _privateConstructorUsedError;
 
@@ -41,7 +41,7 @@ abstract class $GameCopyWith<$Res> {
       {Player player1,
       Player player2,
       List<Card> deck,
-      GameStatus status,
+      GamePhase phase,
       List<int> selectedCardsForExchangeIndecies});
 
   $PlayerCopyWith<$Res> get player1;
@@ -64,7 +64,7 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
     Object? player1 = null,
     Object? player2 = null,
     Object? deck = null,
-    Object? status = null,
+    Object? phase = null,
     Object? selectedCardsForExchangeIndecies = null,
   }) {
     return _then(_value.copyWith(
@@ -80,10 +80,10 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
           ? _value.deck
           : deck // ignore: cast_nullable_to_non_nullable
               as List<Card>,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as GameStatus,
+      phase: null == phase
+          ? _value.phase
+          : phase // ignore: cast_nullable_to_non_nullable
+              as GamePhase,
       selectedCardsForExchangeIndecies: null == selectedCardsForExchangeIndecies
           ? _value.selectedCardsForExchangeIndecies
           : selectedCardsForExchangeIndecies // ignore: cast_nullable_to_non_nullable
@@ -119,7 +119,7 @@ abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
       {Player player1,
       Player player2,
       List<Card> deck,
-      GameStatus status,
+      GamePhase phase,
       List<int> selectedCardsForExchangeIndecies});
 
   @override
@@ -141,7 +141,7 @@ class __$$GameImplCopyWithImpl<$Res>
     Object? player1 = null,
     Object? player2 = null,
     Object? deck = null,
-    Object? status = null,
+    Object? phase = null,
     Object? selectedCardsForExchangeIndecies = null,
   }) {
     return _then(_$GameImpl(
@@ -157,10 +157,10 @@ class __$$GameImplCopyWithImpl<$Res>
           ? _value._deck
           : deck // ignore: cast_nullable_to_non_nullable
               as List<Card>,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as GameStatus,
+      phase: null == phase
+          ? _value.phase
+          : phase // ignore: cast_nullable_to_non_nullable
+              as GamePhase,
       selectedCardsForExchangeIndecies: null == selectedCardsForExchangeIndecies
           ? _value._selectedCardsForExchangeIndecies
           : selectedCardsForExchangeIndecies // ignore: cast_nullable_to_non_nullable
@@ -176,7 +176,7 @@ class _$GameImpl extends _Game {
       {required this.player1,
       required this.player2,
       required final List<Card> deck,
-      required this.status,
+      required this.phase,
       required final List<int> selectedCardsForExchangeIndecies})
       : _deck = deck,
         _selectedCardsForExchangeIndecies = selectedCardsForExchangeIndecies,
@@ -198,7 +198,7 @@ class _$GameImpl extends _Game {
   }
 
   @override
-  final GameStatus status;
+  final GamePhase phase;
   final List<int> _selectedCardsForExchangeIndecies;
   @override
   List<int> get selectedCardsForExchangeIndecies {
@@ -210,7 +210,7 @@ class _$GameImpl extends _Game {
 
   @override
   String toString() {
-    return 'Game(player1: $player1, player2: $player2, deck: $deck, status: $status, selectedCardsForExchangeIndecies: $selectedCardsForExchangeIndecies)';
+    return 'Game(player1: $player1, player2: $player2, deck: $deck, phase: $phase, selectedCardsForExchangeIndecies: $selectedCardsForExchangeIndecies)';
   }
 
   @override
@@ -221,7 +221,7 @@ class _$GameImpl extends _Game {
             (identical(other.player1, player1) || other.player1 == player1) &&
             (identical(other.player2, player2) || other.player2 == player2) &&
             const DeepCollectionEquality().equals(other._deck, _deck) &&
-            (identical(other.status, status) || other.status == status) &&
+            (identical(other.phase, phase) || other.phase == phase) &&
             const DeepCollectionEquality().equals(
                 other._selectedCardsForExchangeIndecies,
                 _selectedCardsForExchangeIndecies));
@@ -234,7 +234,7 @@ class _$GameImpl extends _Game {
       player1,
       player2,
       const DeepCollectionEquality().hash(_deck),
-      status,
+      phase,
       const DeepCollectionEquality().hash(_selectedCardsForExchangeIndecies));
 
   @JsonKey(ignore: true)
@@ -256,7 +256,7 @@ abstract class _Game extends Game {
       {required final Player player1,
       required final Player player2,
       required final List<Card> deck,
-      required final GameStatus status,
+      required final GamePhase phase,
       required final List<int> selectedCardsForExchangeIndecies}) = _$GameImpl;
   _Game._() : super._();
 
@@ -269,7 +269,7 @@ abstract class _Game extends Game {
   @override
   List<Card> get deck;
   @override
-  GameStatus get status;
+  GamePhase get phase;
   @override
   List<int> get selectedCardsForExchangeIndecies;
   @override
