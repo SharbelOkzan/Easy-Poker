@@ -14,10 +14,11 @@ class Game with _$Game {
     required Player player2,
     required List<Card> deck,
     required GamePhase phase,
-    required List<int> selectedCardsForExchangeIndecies,
   }) = _Game;
 
   Game._();
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
+
+  List<Player> get players => [player1, player2];
 }

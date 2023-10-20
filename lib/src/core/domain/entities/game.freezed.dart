@@ -24,8 +24,6 @@ mixin _$Game {
   Player get player2 => throw _privateConstructorUsedError;
   List<Card> get deck => throw _privateConstructorUsedError;
   GamePhase get phase => throw _privateConstructorUsedError;
-  List<int> get selectedCardsForExchangeIndecies =>
-      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,12 +35,7 @@ abstract class $GameCopyWith<$Res> {
   factory $GameCopyWith(Game value, $Res Function(Game) then) =
       _$GameCopyWithImpl<$Res, Game>;
   @useResult
-  $Res call(
-      {Player player1,
-      Player player2,
-      List<Card> deck,
-      GamePhase phase,
-      List<int> selectedCardsForExchangeIndecies});
+  $Res call({Player player1, Player player2, List<Card> deck, GamePhase phase});
 
   $PlayerCopyWith<$Res> get player1;
   $PlayerCopyWith<$Res> get player2;
@@ -65,7 +58,6 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
     Object? player2 = null,
     Object? deck = null,
     Object? phase = null,
-    Object? selectedCardsForExchangeIndecies = null,
   }) {
     return _then(_value.copyWith(
       player1: null == player1
@@ -84,10 +76,6 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
           ? _value.phase
           : phase // ignore: cast_nullable_to_non_nullable
               as GamePhase,
-      selectedCardsForExchangeIndecies: null == selectedCardsForExchangeIndecies
-          ? _value.selectedCardsForExchangeIndecies
-          : selectedCardsForExchangeIndecies // ignore: cast_nullable_to_non_nullable
-              as List<int>,
     ) as $Val);
   }
 
@@ -115,12 +103,7 @@ abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
       __$$GameImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {Player player1,
-      Player player2,
-      List<Card> deck,
-      GamePhase phase,
-      List<int> selectedCardsForExchangeIndecies});
+  $Res call({Player player1, Player player2, List<Card> deck, GamePhase phase});
 
   @override
   $PlayerCopyWith<$Res> get player1;
@@ -142,7 +125,6 @@ class __$$GameImplCopyWithImpl<$Res>
     Object? player2 = null,
     Object? deck = null,
     Object? phase = null,
-    Object? selectedCardsForExchangeIndecies = null,
   }) {
     return _then(_$GameImpl(
       player1: null == player1
@@ -161,10 +143,6 @@ class __$$GameImplCopyWithImpl<$Res>
           ? _value.phase
           : phase // ignore: cast_nullable_to_non_nullable
               as GamePhase,
-      selectedCardsForExchangeIndecies: null == selectedCardsForExchangeIndecies
-          ? _value._selectedCardsForExchangeIndecies
-          : selectedCardsForExchangeIndecies // ignore: cast_nullable_to_non_nullable
-              as List<int>,
     ));
   }
 }
@@ -176,10 +154,8 @@ class _$GameImpl extends _Game {
       {required this.player1,
       required this.player2,
       required final List<Card> deck,
-      required this.phase,
-      required final List<int> selectedCardsForExchangeIndecies})
+      required this.phase})
       : _deck = deck,
-        _selectedCardsForExchangeIndecies = selectedCardsForExchangeIndecies,
         super._();
 
   factory _$GameImpl.fromJson(Map<String, dynamic> json) =>
@@ -199,18 +175,10 @@ class _$GameImpl extends _Game {
 
   @override
   final GamePhase phase;
-  final List<int> _selectedCardsForExchangeIndecies;
-  @override
-  List<int> get selectedCardsForExchangeIndecies {
-    if (_selectedCardsForExchangeIndecies is EqualUnmodifiableListView)
-      return _selectedCardsForExchangeIndecies;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_selectedCardsForExchangeIndecies);
-  }
 
   @override
   String toString() {
-    return 'Game(player1: $player1, player2: $player2, deck: $deck, phase: $phase, selectedCardsForExchangeIndecies: $selectedCardsForExchangeIndecies)';
+    return 'Game(player1: $player1, player2: $player2, deck: $deck, phase: $phase)';
   }
 
   @override
@@ -221,21 +189,13 @@ class _$GameImpl extends _Game {
             (identical(other.player1, player1) || other.player1 == player1) &&
             (identical(other.player2, player2) || other.player2 == player2) &&
             const DeepCollectionEquality().equals(other._deck, _deck) &&
-            (identical(other.phase, phase) || other.phase == phase) &&
-            const DeepCollectionEquality().equals(
-                other._selectedCardsForExchangeIndecies,
-                _selectedCardsForExchangeIndecies));
+            (identical(other.phase, phase) || other.phase == phase));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      player1,
-      player2,
-      const DeepCollectionEquality().hash(_deck),
-      phase,
-      const DeepCollectionEquality().hash(_selectedCardsForExchangeIndecies));
+  int get hashCode => Object.hash(runtimeType, player1, player2,
+      const DeepCollectionEquality().hash(_deck), phase);
 
   @JsonKey(ignore: true)
   @override
@@ -256,8 +216,7 @@ abstract class _Game extends Game {
       {required final Player player1,
       required final Player player2,
       required final List<Card> deck,
-      required final GamePhase phase,
-      required final List<int> selectedCardsForExchangeIndecies}) = _$GameImpl;
+      required final GamePhase phase}) = _$GameImpl;
   _Game._() : super._();
 
   factory _Game.fromJson(Map<String, dynamic> json) = _$GameImpl.fromJson;
@@ -270,8 +229,6 @@ abstract class _Game extends Game {
   List<Card> get deck;
   @override
   GamePhase get phase;
-  @override
-  List<int> get selectedCardsForExchangeIndecies;
   @override
   @JsonKey(ignore: true)
   _$$GameImplCopyWith<_$GameImpl> get copyWith =>

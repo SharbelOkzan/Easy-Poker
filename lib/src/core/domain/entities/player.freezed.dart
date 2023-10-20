@@ -20,7 +20,7 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Player {
-  int get id => throw _privateConstructorUsedError;
+  PlayerId get id => throw _privateConstructorUsedError;
   List<Card> get cards => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -33,7 +33,7 @@ abstract class $PlayerCopyWith<$Res> {
   factory $PlayerCopyWith(Player value, $Res Function(Player) then) =
       _$PlayerCopyWithImpl<$Res, Player>;
   @useResult
-  $Res call({int id, List<Card> cards});
+  $Res call({PlayerId id, List<Card> cards});
 }
 
 /// @nodoc
@@ -56,7 +56,7 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as PlayerId,
       cards: null == cards
           ? _value.cards
           : cards // ignore: cast_nullable_to_non_nullable
@@ -72,7 +72,7 @@ abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
       __$$PlayerImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, List<Card> cards});
+  $Res call({PlayerId id, List<Card> cards});
 }
 
 /// @nodoc
@@ -93,7 +93,7 @@ class __$$PlayerImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as PlayerId,
       cards: null == cards
           ? _value._cards
           : cards // ignore: cast_nullable_to_non_nullable
@@ -112,7 +112,7 @@ class _$PlayerImpl implements _Player {
       _$$PlayerImplFromJson(json);
 
   @override
-  final int id;
+  final PlayerId id;
   final List<Card> _cards;
   @override
   List<Card> get cards {
@@ -155,13 +155,14 @@ class _$PlayerImpl implements _Player {
 }
 
 abstract class _Player implements Player {
-  factory _Player({required final int id, required final List<Card> cards}) =
-      _$PlayerImpl;
+  factory _Player(
+      {required final PlayerId id,
+      required final List<Card> cards}) = _$PlayerImpl;
 
   factory _Player.fromJson(Map<String, dynamic> json) = _$PlayerImpl.fromJson;
 
   @override
-  int get id;
+  PlayerId get id;
   @override
   List<Card> get cards;
   @override
