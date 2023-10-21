@@ -1,0 +1,7 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          # Needed for serializing freezed classes containing lists/maps of other other freezed classes 
+          explicit_to_json: true

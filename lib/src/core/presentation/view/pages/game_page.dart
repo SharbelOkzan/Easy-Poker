@@ -1,5 +1,7 @@
-import 'package:easy_poker/src/core/domain/entities/enums/game_status.dart';
+import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
+import 'package:easy_poker/src/core/domain/logic/controllers/offline_game_cotroller.dart';
 import 'package:easy_poker/src/core/presentation/notifiers/game_notifier.dart';
+import 'package:easy_poker/src/core/presentation/notifiers/selected_cards_for_exchange_notifier.dart';
 import 'package:easy_poker/src/core/presentation/view/widgets/hand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,28 +15,37 @@ class GamePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(children: [
       TextButton(
-          onPressed: ref.read(gameProvider.notifier).endPlayerTurn,
+          onPressed:
+              ref.read(offlineGameControllerProvider).endCurrentGamePhase,
           child: Text("end turn")),
       TextButton(
-          onPressed: ref.read(gameProvider.notifier).exchangeCards,
+          onPressed: () => ref
+              .read(offlineGameControllerProvider)
+              .exchangeCards(ref.read(selectedCardsForExchangeProvider)),
           child: Text("exchange selected")),
       _gameBody(ref),
     ]);
   }
 
   Widget _gameBody(WidgetRef ref) {
-    GameStatus status = ref.watch(gameProvider).status;
-    switch (status) {
-      case GameRunning():
+    OfflineGamePhase phase =
+        ref.watch(gameNotifierProvider).phase as OfflineGamePhase;
+    switch (phase) {
+      case OfflineGameRunning():
         return HandWidget(
           selectedCardsForExchangeIndecies:
-              ref.watch(gameProvider).selectedCardsForExchangeIndecies,
-          cards: ref.watch(gameProvider.notifier).cardsToShow,
-          onCardTap: ref.read(gameProvider.notifier).selectCardForExchange,
+              ref.watch(selectedCardsForExchangeProvider),
+          cards: ref
+              .watch(offlineGameControllerProvider)
+              .currentActivePlayer
+              ?.cards,
+          onCardTap: ref
+              .read(selectedCardsForExchangeProvider.notifier)
+              .selectCardForExchange,
         );
-      case GameEnded():
+      case GameEndedPhase():
         return Text(
-            "game results ${status.winner.id} won because ${Hand(cards: status.winner.cards).handType.name} is stronger than ${Hand(cards: status.looser.cards).handType.name}");
+            "game results ${phase.winner.id} won because ${Hand(cards: phase.winner.cards).handType.name} is stronger than ${Hand(cards: phase.looser.cards).handType.name}");
     }
   }
 }
