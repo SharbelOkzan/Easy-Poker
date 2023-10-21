@@ -50,9 +50,8 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
           onPressed: ref.read(onlineGameControllerProvider).endCurrentGamePhase,
           child: Text("end turn")),
       TextButton(
-          onPressed: () => ref
-              .read(onlineGameControllerProvider)
-              .exchangeCards(ref.read(selectedCardsForExchangeProvider)),
+          onPressed: () => ref.read(onlineGameControllerProvider).exchangeCards(
+              ref.read(selectedCardsForExchangeProvider).selectedCards),
           child: Text("exchange selected")),
       _gameBody(ref),
     ]);
@@ -74,7 +73,7 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
       case OnlineGameRunning():
         return HandWidget(
           selectedCardsForExchangeIndecies:
-              ref.watch(selectedCardsForExchangeProvider),
+              ref.watch(selectedCardsForExchangeProvider).selectedCards,
           cards:
               ref.read(onlineGameControllerProvider).currentActivePlayer!.cards,
           onCardTap: ref
