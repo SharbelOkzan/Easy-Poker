@@ -38,5 +38,6 @@ class MyApp extends StatelessWidget {
       case 'offline':
         return MaterialPageRoute(builder: (_) => const OfflineGamePage());
     }
+    return null;
   }
 }

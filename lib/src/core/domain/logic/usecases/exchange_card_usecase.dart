@@ -18,9 +18,8 @@ class ExchangeCardUsecase extends UseCase<
     List<Card> updatedDeck, updatedHand;
     Card drawnCard;
     (updatedDeck, drawnCard) = _drawCard(param.deck);
-    updatedHand = [...param.hand]
-      ..removeAt(param.cardToExchangeIndex)
-      ..add(drawnCard);
+    updatedHand = [...param.hand]..replaceRange(
+        param.cardToExchangeIndex, param.cardToExchangeIndex + 1, [drawnCard]);
     return (updatedDeck, updatedHand);
   }
 }

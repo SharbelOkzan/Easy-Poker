@@ -8,19 +8,17 @@ class HandWidget extends StatelessWidget {
       {super.key,
       required this.cards,
       required this.onCardTap,
-      required this.selectedCardsForExchangeIndecies});
+      required this.selectedCardsForExchangeIndices});
 
   final List<Card>? cards;
-  final List<int> selectedCardsForExchangeIndecies;
+  final List<int> selectedCardsForExchangeIndices;
   final void Function(int index) onCardTap;
 
   @override
   Widget build(BuildContext context) {
-    return cards == null
-        ? Text("closed hand")
-        : _HandLayout(
-            children: _cardsWidgets,
-          );
+    return _HandLayout(
+      children: _cardsWidgets,
+    );
   }
 
   List<CardWidget> get _cardsWidgets {
@@ -29,7 +27,7 @@ class HandWidget extends StatelessWidget {
       res.add(CardWidget(
           index: card.index,
           suit: card.suit,
-          isSelected: selectedCardsForExchangeIndecies.contains(index),
+          isSelected: selectedCardsForExchangeIndices.contains(index),
           onTap: () => onCardTap(index)));
     });
     return res;
@@ -37,13 +35,13 @@ class HandWidget extends StatelessWidget {
 }
 
 class _HandLayout extends StatelessWidget {
-  _HandLayout({
+  const _HandLayout({
     Key? key,
     required List<Widget> children,
   })  : _children = children,
         super(key: key);
 
-  List<Widget> _children;
+  final List<Widget> _children;
 
   List<Widget> get children => _children
       .asMap()
@@ -68,6 +66,7 @@ class _HandLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 300,
+      width: double.infinity,
       child: Stack(
         alignment: Alignment.center,
         children: children,

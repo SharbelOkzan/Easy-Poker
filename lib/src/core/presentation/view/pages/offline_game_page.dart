@@ -1,6 +1,6 @@
 import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
 import 'package:easy_poker/src/core/domain/logic/controllers/offline_game_cotroller.dart';
-import 'package:easy_poker/src/core/presentation/notifiers/game_notifier.dart';
+import 'package:easy_poker/src/core/presentation/notifiers/offline_game_notifier.dart';
 import 'package:easy_poker/src/core/presentation/notifiers/selected_cards_for_exchange_notifier.dart';
 import 'package:easy_poker/src/core/presentation/view/widgets/game_controls_widget.dart';
 import 'package:easy_poker/src/core/presentation/view/widgets/game_results_widget.dart';
@@ -40,7 +40,7 @@ class OfflineGamePageState extends ConsumerState<OfflineGamePage> {
           (next.phase as OfflineGameRunning).currentActivePlayerId != null;
 
       if (hasNewTurnStarted) {
-        ref.read(selectedCardsForExchangeProvider.notifier).onNewTurnStarted();
+        ref.invalidate(selectedCardsForExchangeProvider);
       }
     });
     return Scaffold(
@@ -76,16 +76,16 @@ class OfflineGamePageState extends ConsumerState<OfflineGamePage> {
             ? _getHand(ref)
             : const _BetweenTurnsInstructionsWidget();
       case GameEndedPhase():
-        return GameResultsWidget(phase: phase);
+        return Expanded(child: GameResultsWidget(phase: phase));
     }
   }
 
   HandWidget _getHand(WidgetRef ref) {
     return HandWidget(
-      selectedCardsForExchangeIndecies:
+      selectedCardsForExchangeIndices:
           ref.watch(selectedCardsForExchangeProvider).selectedCards,
       cards:
-          ref.watch(offlineGameControllerProvider).currentActivePlayer?.cards,
+          ref.watch(offlineGameControllerProvider).currentActivePlayer!.cards,
       onCardTap: ref
           .read(selectedCardsForExchangeProvider.notifier)
           .selectCardForExchange,
@@ -98,8 +98,13 @@ class _BetweenTurnsInstructionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Pass the phone to the next player"),
+    return const Expanded(
+      child: Center(
+        child: Text(
+          "Pass the phone to the next player",
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
     );
   }
 }

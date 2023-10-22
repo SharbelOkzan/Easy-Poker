@@ -44,17 +44,17 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_initialized) {
-      return const CircularProgressIndicator();
-    }
-    return Scaffold(body: _mapStreamToWidget(ref));
+    return Scaffold(
+        body: _initialized
+            ? _mapStreamToWidget(ref)
+            : const Center(child: Icon(Icons.cloud_sync)));
   }
 
   Widget _mapStreamToWidget(WidgetRef ref) {
     return switch (ref.watch(remoteGameRefSnapshotsProvider)) {
       AsyncData<DocumentSnapshot<Game>>(:final value) => value.exists
           ? _getGameBody(value.data()!)
-          : const CircularProgressIndicator(),
+          : _getOpponentLeftGameWidget(),
       AsyncError(:final error) =>
         Text("Something went wrong, please try again \n $error"),
       _ => const CircularProgressIndicator(),
@@ -77,7 +77,7 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
         return const WaitingForPlayersWidget();
       case OnlineGameRunning():
         return HandWidget(
-          selectedCardsForExchangeIndecies:
+          selectedCardsForExchangeIndices:
               ref.watch(selectedCardsForExchangeProvider).selectedCards,
           cards:
               ref.read(onlineGameControllerProvider).currentActivePlayer!.cards,
@@ -86,7 +86,14 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
               .selectCardForExchange,
         );
       case GameEndedPhase():
-        return GameResultsWidget(phase: phase);
+        return Expanded(child: GameResultsWidget(phase: phase));
     }
+  }
+
+  Widget _getOpponentLeftGameWidget() {
+    return const Center(
+      child: Text(
+          "Your opponent has left the game. \n Start over to find a new opponent"),
+    );
   }
 }
