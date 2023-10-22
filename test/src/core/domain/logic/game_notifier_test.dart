@@ -19,7 +19,9 @@ class GameListener extends Mock {
 }
 
 class SelectedCardsListener extends Mock {
-  void call(List<int>? previous, List<int> value) => callMockIgnoreParams();
+  void call(({List<int> selectedCards, bool canExchange})? previous,
+          ({List<int> selectedCards, bool canExchange}) value) =>
+      callMockIgnoreParams();
   void callMockIgnoreParams();
 }
 
@@ -34,7 +36,7 @@ void main() {
       });
       final listener = SelectedCardsListener();
 
-      container.listen<List<int>>(
+      container.listen<({List<int> selectedCards, bool canExchange})>(
         selectedCardsForExchangeProvider,
         listener.call,
         fireImmediately: true,
@@ -54,7 +56,8 @@ void main() {
       verify(listener.callMockIgnoreParams()).called(2);
       verifyNoMoreInteractions(listener);
       var listEquality = listEquals(
-          container.read(selectedCardsForExchangeProvider), const [0, 2]);
+          container.read(selectedCardsForExchangeProvider).selectedCards,
+          const [0, 2]);
       expect(listEquality, true);
 
       // unselect a card
@@ -64,7 +67,8 @@ void main() {
       verify(listener.callMockIgnoreParams()).called(1);
       verifyNoMoreInteractions(listener);
       listEquality = listEquals(
-          container.read(selectedCardsForExchangeProvider), const [2]);
+          container.read(selectedCardsForExchangeProvider).selectedCards,
+          const [2]);
       expect(listEquality, true);
     });
 
