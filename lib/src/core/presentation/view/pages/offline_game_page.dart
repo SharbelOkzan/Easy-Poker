@@ -8,8 +8,8 @@ import 'package:easy_poker/src/core/presentation/view/widgets/hand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GamePage extends ConsumerWidget {
-  const GamePage({super.key});
+class OfflineGamePage extends ConsumerWidget {
+  const OfflineGamePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
