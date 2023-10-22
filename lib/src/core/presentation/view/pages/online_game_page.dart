@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_poker/src/core/data/repositories/remote_game_repository.dart';
 import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
 import 'package:easy_poker/src/core/domain/entities/game.dart';
@@ -24,7 +25,7 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
 
   @override
   void deactivate() {
-    ref.read(remoteGameRefProvider).delete();
+    ref.read(remoteGameRefProvider).value?.delete();
     super.deactivate();
   }
 
@@ -36,7 +37,7 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
     ref.invalidate(selectedCardsForExchangeProvider);
     ref
         .read(remoteGameRepositoryProvider)
-        .initialize()
+        .gameReference
         .then((_) => setState(() => _initialized = true));
     super.didChangeDependencies();
   }
@@ -51,8 +52,11 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
 
   Widget _mapStreamToWidget(WidgetRef ref) {
     return switch (ref.watch(remoteGameRefSnapshotsProvider)) {
-      AsyncData(:final value) => _getGameBody(value.data()!),
-      AsyncError(:final error) => Text(error.toString()),
+      AsyncData<DocumentSnapshot<Game>>(:final value) => value.exists
+          ? _getGameBody(value.data()!)
+          : const CircularProgressIndicator(),
+      AsyncError(:final error) =>
+        Text("Something went wrong, please try again \n $error"),
       _ => const CircularProgressIndicator(),
     };
   }

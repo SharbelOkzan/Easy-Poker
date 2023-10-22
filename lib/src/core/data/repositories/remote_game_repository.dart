@@ -9,7 +9,8 @@ import 'package:easy_poker/src/core/domain/logic/usecases/get_shuffled_deck_usec
 import 'package:easy_poker/src/service_locator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Provider<DocumentReference<Game>> remoteGameRefProvider = Provider((ref) {
+FutureProvider<DocumentReference<Game>> remoteGameRefProvider =
+    FutureProvider((ref) {
   return ref.watch(remoteGameRepositoryProvider).gameReference;
 }); // TODO remove this and rely on the RemoteGameDatasourceProvider
 
@@ -40,11 +41,13 @@ class RemoteGameDataRepository {
 
   DocumentReference<Game>? _gameReference;
 
-  DocumentReference<Game> get gameReference =>
-      _assertInitialized(_gameReference);
-
-  Future<void> initialize() async {
-    _gameReference = await _getGameReference();
+  Future<DocumentReference<Game>> get gameReference async {
+    if (_gameReference != null) {
+      return _gameReference!;
+    } else {
+      _gameReference = await _getGameReference();
+      return _gameReference!;
+    }
   }
 
   CollectionReference<Game> get _gamesCollectionRef =>
