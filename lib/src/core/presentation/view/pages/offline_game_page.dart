@@ -82,7 +82,7 @@ class OfflineGamePageState extends ConsumerState<OfflineGamePage> {
 
   HandWidget _getHand(WidgetRef ref) {
     return HandWidget(
-      selectedCardsForExchangeIndecies:
+      selectedCardsForExchangeIndices:
           ref.watch(selectedCardsForExchangeProvider).selectedCards,
       cards:
           ref.watch(offlineGameControllerProvider).currentActivePlayer!.cards,

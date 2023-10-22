@@ -8,11 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/logic/usecases/get_shuffled_deck_usecase.dart';
 import '../../domain/entities/card.dart';
 import '../../domain/logic/usecases/calculate_game_results_usecase.dart';
-import '../../domain/logic/usecases/exchage_card_usecase.dart';
+import '../../domain/logic/usecases/exchange_card_usecase.dart';
 
 final gameNotifierProvider =
     NotifierProvider<GameNotifier, Game>(() => GameNotifier(
-          getShuffeledDeck: getIt.get(),
+          getShuffledDeck: getIt.get(),
           calculateGameResults: getIt.get(),
           exchangeCard: getIt.get(),
         ));
@@ -21,16 +21,12 @@ final gameNotifierProvider =
 // based on lib author recomendation
 // https://stackoverflow.com/a/76323140/15690446
 class GameNotifier extends Notifier<Game> {
-  final GetShuffeledDeckUsecase _getShuffeledDeck;
-  final CalculateGameResultsUsecase _calculateGameResults;
-  final ExchangeCardUsecase _exchangeCard;
+  final GetShuffledDeckUsecase _getShuffledDeck;
   GameNotifier({
-    required GetShuffeledDeckUsecase getShuffeledDeck,
+    required GetShuffledDeckUsecase getShuffledDeck,
     required CalculateGameResultsUsecase calculateGameResults,
     required ExchangeCardUsecase exchangeCard,
-  })  : _calculateGameResults = calculateGameResults,
-        _exchangeCard = exchangeCard,
-        _getShuffeledDeck = getShuffeledDeck;
+  }) : _getShuffledDeck = getShuffledDeck;
 
   updatedGameState(Game game) {
     state = game;
@@ -38,7 +34,7 @@ class GameNotifier extends Notifier<Game> {
 
   @override
   Game build() {
-    List<Card> deck = _getShuffeledDeck();
+    List<Card> deck = _getShuffledDeck();
     List<Card> firstPlayerCards = deck.sublist(0, 5);
     deck.removeRange(0, 5);
     List<Card> secondPlayerCards = deck.sublist(0, 5);

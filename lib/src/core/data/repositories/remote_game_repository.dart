@@ -12,27 +12,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 FutureProvider<DocumentReference<Game>> remoteGameRefProvider =
     FutureProvider((ref) {
   return ref.watch(remoteGameRepositoryProvider).gameReference;
-}); // TODO remove this and rely on the RemoteGameDatasourceProvider
+});
 
 Provider<RemoteGameDataRepository> remoteGameRepositoryProvider = Provider(
     (ref) => RemoteGameDataRepository(
         firestore: FirebaseFirestore.instance,
         drawCard: getIt.get(),
-        getShuffeledDeck: getIt.get()));
+        getShuffledDeck: getIt.get()));
 
 class RemoteGameDataRepository {
   final FirebaseFirestore _firestore;
-  final GetShuffeledDeckUsecase _getShuffeledDeck;
+  final GetShuffledDeckUsecase _getShuffledDeck;
   final DrawCardUsecase _drawCard;
 
   static const String _gameCollectionPath = "games";
 
   RemoteGameDataRepository(
       {required FirebaseFirestore firestore,
-      required GetShuffeledDeckUsecase getShuffeledDeck,
+      required GetShuffledDeckUsecase getShuffledDeck,
       required DrawCardUsecase drawCard})
       : _firestore = firestore,
-        _getShuffeledDeck = getShuffeledDeck,
+        _getShuffledDeck = getShuffledDeck,
         _drawCard = drawCard;
 
   PlayerId? _currentPlayerId;
@@ -74,7 +74,7 @@ class RemoteGameDataRepository {
 
   Future<DocumentReference<Game>> _createNewGame() {
     _currentPlayerId = PlayerId.p1;
-    List<Card> deck = _getShuffeledDeck();
+    List<Card> deck = _getShuffledDeck();
     List<Card> player1Cards = [];
     List<Card> player2Cards = [];
 
@@ -111,7 +111,7 @@ class RemoteGameDataRepository {
 
   T _assertInitialized<T>(T? attribute) {
     assert(attribute != null,
-        "Make sure that you called and awaited `initialize()` on `RemoteGameDatasource` before accessing any of its members");
+        "Make sure that you called and awaited `initialize()` on `RemoteGameDataRepository` before accessing any of its members");
     return attribute!;
   }
 }

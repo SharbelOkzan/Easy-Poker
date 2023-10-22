@@ -6,7 +6,7 @@ import '../../entities/card.dart';
 import '../../entities/enums/card_suit.dart';
 
 @injectable
-class GetShuffeledDeckUsecase extends NoParamsUseCase<List<Card>> {
+class GetShuffledDeckUsecase extends NoParamsUseCase<List<Card>> {
   @override
   List<Card> call() {
     List<Card> allCards = List<Card>.empty(growable: true);

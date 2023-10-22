@@ -12,7 +12,7 @@ import 'package:easy_poker/src/core/domain/logic/usecases/calculate_game_results
     as _i3;
 import 'package:easy_poker/src/core/domain/logic/usecases/draw_card_usecase.dart'
     as _i4;
-import 'package:easy_poker/src/core/domain/logic/usecases/exchage_card_usecase.dart'
+import 'package:easy_poker/src/core/domain/logic/usecases/exchange_card_usecase.dart'
     as _i5;
 import 'package:easy_poker/src/core/domain/logic/usecases/get_shuffled_deck_usecase.dart'
     as _i6;
@@ -35,8 +35,7 @@ extension GetItInjectableX on _i1.GetIt {
     gh.factory<_i4.DrawCardUsecase>(() => _i4.DrawCardUsecase());
     gh.factory<_i5.ExchangeCardUsecase>(
         () => _i5.ExchangeCardUsecase(gh<_i4.DrawCardUsecase>()));
-    gh.factory<_i6.GetShuffeledDeckUsecase>(
-        () => _i6.GetShuffeledDeckUsecase());
+    gh.factory<_i6.GetShuffledDeckUsecase>(() => _i6.GetShuffledDeckUsecase());
     return this;
   }
 }

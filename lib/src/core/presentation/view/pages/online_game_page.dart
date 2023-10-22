@@ -77,7 +77,7 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
         return const WaitingForPlayersWidget();
       case OnlineGameRunning():
         return HandWidget(
-          selectedCardsForExchangeIndecies:
+          selectedCardsForExchangeIndices:
               ref.watch(selectedCardsForExchangeProvider).selectedCards,
           cards:
               ref.read(onlineGameControllerProvider).currentActivePlayer!.cards,

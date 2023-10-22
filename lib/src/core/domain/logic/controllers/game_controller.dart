@@ -4,12 +4,12 @@ import 'package:easy_poker/src/core/domain/entities/enums/player_id.dart';
 import 'package:easy_poker/src/core/domain/entities/game.dart';
 import 'package:easy_poker/src/core/domain/entities/player.dart';
 import 'package:easy_poker/src/core/domain/logic/usecases/calculate_game_results_usecase.dart';
-import 'package:easy_poker/src/core/domain/logic/usecases/exchage_card_usecase.dart';
+import 'package:easy_poker/src/core/domain/logic/usecases/exchange_card_usecase.dart';
 import 'package:easy_poker/src/core/domain/logic/usecases/get_shuffled_deck_usecase.dart';
 
 abstract class GameController {
   GameController(
-      {required GetShuffeledDeckUsecase getShuffeledDeck,
+      {required GetShuffledDeckUsecase getShuffeledDeck,
       required CalculateGameResultsUsecase calculateGameResults,
       required ExchangeCardUsecase exchangeCard})
       : _calculateGameResults = calculateGameResults,
