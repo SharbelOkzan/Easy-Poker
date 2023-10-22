@@ -24,7 +24,7 @@ class GameControls extends ConsumerWidget {
             TextButton(
                 onPressed: ref.read(controller).endCurrentGamePhase,
                 child: const Text("Done")),
-          if (ref.watch(selectedCardsForExchangeProvider).canExchange)
+          if (_isExchangeButtonVisible(phase, ref))
             TextButton(
                 onPressed: () => _onExchangeCardsPressed(ref),
                 child: const Text("Exchange selected")),
@@ -37,5 +37,14 @@ class GameControls extends ConsumerWidget {
     ref.read(controller).exchangeCards(
         ref.read(selectedCardsForExchangeProvider).selectedCards);
     ref.read(selectedCardsForExchangeProvider.notifier).onCardsExchanged();
+  }
+
+  bool _isExchangeButtonVisible(GamePhase phase, WidgetRef ref) {
+    bool offlineExchangePhase =
+        phase is OfflineGameRunning && phase.currentActivePlayerId != null;
+    bool onlineExchangePhase = phase is OnlineGameRunning;
+    bool playerCanExchange =
+        ref.watch(selectedCardsForExchangeProvider).canExchange;
+    return (playerCanExchange && (offlineExchangePhase || onlineExchangePhase));
   }
 }

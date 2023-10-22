@@ -40,7 +40,7 @@ class OfflineGamePageState extends ConsumerState<OfflineGamePage> {
           (next.phase as OfflineGameRunning).currentActivePlayerId != null;
 
       if (hasNewTurnStarted) {
-        ref.read(selectedCardsForExchangeProvider.notifier).onNewTurnStarted();
+        ref.invalidate(selectedCardsForExchangeProvider);
       }
     });
     return Scaffold(
