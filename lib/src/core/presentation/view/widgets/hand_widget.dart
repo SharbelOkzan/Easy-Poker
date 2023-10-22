@@ -68,6 +68,7 @@ class _HandLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 300,
+      width: double.infinity,
       child: Stack(
         alignment: Alignment.center,
         children: children,
