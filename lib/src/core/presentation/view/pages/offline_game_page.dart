@@ -1,6 +1,6 @@
 import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
 import 'package:easy_poker/src/core/domain/logic/controllers/offline_game_cotroller.dart';
-import 'package:easy_poker/src/core/presentation/notifiers/game_notifier.dart';
+import 'package:easy_poker/src/core/presentation/notifiers/offline_game_notifier.dart';
 import 'package:easy_poker/src/core/presentation/notifiers/selected_cards_for_exchange_notifier.dart';
 import 'package:easy_poker/src/core/presentation/view/widgets/game_controls_widget.dart';
 import 'package:easy_poker/src/core/presentation/view/widgets/game_results_widget.dart';

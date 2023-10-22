@@ -2,7 +2,7 @@ import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
 import 'package:easy_poker/src/core/domain/entities/game.dart';
 import 'package:easy_poker/src/core/domain/entities/player.dart';
 import 'package:easy_poker/src/core/domain/logic/controllers/game_controller.dart';
-import 'package:easy_poker/src/core/presentation/notifiers/game_notifier.dart';
+import 'package:easy_poker/src/core/presentation/notifiers/offline_game_notifier.dart';
 import 'package:easy_poker/src/service_locator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
