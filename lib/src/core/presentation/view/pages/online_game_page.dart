@@ -66,7 +66,7 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
     );
   }
 
-  _getHand(Game game) {
+  Widget _getHand(Game game) {
     OnlineGamePhase phase = game.phase as OnlineGamePhase;
     switch (phase) {
       case GameWaitingForPlayer():
@@ -82,7 +82,7 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
               .selectCardForExchange,
         );
       case GameEndedPhase():
-        GameResultsWidget(phase: phase);
+        return GameResultsWidget(phase: phase);
     }
   }
 }
