@@ -8,11 +8,30 @@ import 'package:easy_poker/src/core/presentation/view/widgets/hand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class OfflineGamePage extends ConsumerWidget {
+class OfflineGamePage extends ConsumerStatefulWidget {
   const OfflineGamePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return OfflineGamePageState();
+  }
+}
+
+class OfflineGamePageState extends ConsumerState<OfflineGamePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    ref.invalidate(gameNotifierProvider);
+    ref.invalidate(selectedCardsForExchangeProvider);
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ref.listen(gameNotifierProvider, (prev, next) {
       final hasNewTurnStarted = prev != null &&
           prev.phase is OfflineGameRunning &&

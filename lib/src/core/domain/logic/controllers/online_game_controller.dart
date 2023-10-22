@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 StreamProvider<DocumentSnapshot<Game>> remoteGameRefSnapshotsProvider =
     StreamProvider((ref) {
-  return ref.read(remoteGameRefProvider).snapshots();
+  return ref.watch(remoteGameRefProvider).snapshots();
 });
 
 Provider<OnlineGameController> onlineGameControllerProvider = Provider((ref) =>

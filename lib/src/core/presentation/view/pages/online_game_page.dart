@@ -21,10 +21,6 @@ class OnlineGamePage extends ConsumerStatefulWidget {
 
 class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
   bool _initialized = false;
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   void deactivate() {
@@ -33,12 +29,16 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
   }
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    ref.invalidate(remoteGameRepositoryProvider);
+    ref.invalidate(remoteGameRefProvider);
+    ref.invalidate(remoteGameRefSnapshotsProvider);
+    ref.invalidate(selectedCardsForExchangeProvider);
     ref
         .read(remoteGameRepositoryProvider)
         .initialize()
         .then((_) => setState(() => _initialized = true));
-    super.initState();
+    super.didChangeDependencies();
   }
 
   @override

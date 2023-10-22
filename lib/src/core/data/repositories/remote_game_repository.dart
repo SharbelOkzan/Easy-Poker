@@ -10,7 +10,7 @@ import 'package:easy_poker/src/service_locator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Provider<DocumentReference<Game>> remoteGameRefProvider = Provider((ref) {
-  return ref.read(remoteGameRepositoryProvider).gameReference;
+  return ref.watch(remoteGameRepositoryProvider).gameReference;
 }); // TODO remove this and rely on the RemoteGameDatasourceProvider
 
 Provider<RemoteGameDataRepository> remoteGameRepositoryProvider = Provider(
