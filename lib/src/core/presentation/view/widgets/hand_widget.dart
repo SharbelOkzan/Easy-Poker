@@ -16,11 +16,9 @@ class HandWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return cards == null
-        ? Text("closed hand")
-        : _HandLayout(
-            children: _cardsWidgets,
-          );
+    return _HandLayout(
+      children: _cardsWidgets,
+    );
   }
 
   List<CardWidget> get _cardsWidgets {

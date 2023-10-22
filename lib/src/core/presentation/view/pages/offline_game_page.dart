@@ -76,7 +76,7 @@ class OfflineGamePageState extends ConsumerState<OfflineGamePage> {
             ? _getHand(ref)
             : const _BetweenTurnsInstructionsWidget();
       case GameEndedPhase():
-        return GameResultsWidget(phase: phase);
+        return Expanded(child: GameResultsWidget(phase: phase));
     }
   }
 
@@ -85,7 +85,7 @@ class OfflineGamePageState extends ConsumerState<OfflineGamePage> {
       selectedCardsForExchangeIndecies:
           ref.watch(selectedCardsForExchangeProvider).selectedCards,
       cards:
-          ref.watch(offlineGameControllerProvider).currentActivePlayer?.cards,
+          ref.watch(offlineGameControllerProvider).currentActivePlayer!.cards,
       onCardTap: ref
           .read(selectedCardsForExchangeProvider.notifier)
           .selectCardForExchange,
@@ -98,8 +98,13 @@ class _BetweenTurnsInstructionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Pass the phone to the next player"),
+    return const Expanded(
+      child: Center(
+        child: Text(
+          "Pass the phone to the next player",
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
     );
   }
 }

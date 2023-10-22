@@ -86,7 +86,7 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
               .selectCardForExchange,
         );
       case GameEndedPhase():
-        return GameResultsWidget(phase: phase);
+        return Expanded(child: GameResultsWidget(phase: phase));
     }
   }
 }
