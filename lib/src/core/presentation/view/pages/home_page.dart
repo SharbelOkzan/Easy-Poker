@@ -1,15 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_poker/src/core/domain/entities/enums/card_index.dart';
-import 'package:easy_poker/src/core/domain/entities/enums/card_suit.dart';
-import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
-import 'package:easy_poker/src/core/domain/entities/enums/player_id.dart';
-import 'package:easy_poker/src/core/domain/entities/game.dart';
-import 'package:easy_poker/src/core/domain/entities/player.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
-import 'package:easy_poker/src/core/domain/entities/card.dart' as c;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -19,14 +8,14 @@ class HomePage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextButton(
+          _GameModeButton(
               onPressed: () => _toOfflineGamePage(context),
-              child: Text("offline")),
-          TextButton(
+              label: "Play Offline"),
+          _GameModeButton(
               onPressed: () => _toOnlineGamePage(context),
-              child: Text("online")),
+              label: "Play Online"),
         ],
       ),
     );
@@ -38,5 +27,28 @@ class HomePage extends StatelessWidget {
 
   void _toOnlineGamePage(BuildContext context) {
     Navigator.pushNamed(context, "online");
+  }
+}
+
+class _GameModeButton extends StatelessWidget {
+  const _GameModeButton(
+      {super.key, required this.onPressed, required this.label});
+  final VoidCallback onPressed;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: TextButton(
+          onPressed: onPressed,
+          style: ButtonStyle(
+              side: MaterialStatePropertyAll(
+                  BorderSide(color: Theme.of(context).primaryColor))),
+          child: Text(label),
+        ),
+      ),
+    );
   }
 }

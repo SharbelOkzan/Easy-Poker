@@ -1,5 +1,5 @@
 import 'package:easy_poker/firebase_options.dart';
-import 'package:easy_poker/src/core/presentation/view/pages/game_page.dart';
+import 'package:easy_poker/src/core/presentation/view/pages/offline_game_page.dart';
 import 'package:easy_poker/src/core/presentation/view/pages/home_page.dart';
 import 'package:easy_poker/src/core/presentation/view/pages/online_game_page.dart';
 import 'package:easy_poker/src/service_locator.dart';
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       case 'online':
         return MaterialPageRoute(builder: (_) => const OnlineGamePage());
       case 'offline':
-        return MaterialPageRoute(builder: (_) => const GamePage());
+        return MaterialPageRoute(builder: (_) => const OfflineGamePage());
     }
   }
 }

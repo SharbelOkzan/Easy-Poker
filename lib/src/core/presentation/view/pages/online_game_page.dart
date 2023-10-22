@@ -3,11 +3,12 @@ import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
 import 'package:easy_poker/src/core/domain/entities/game.dart';
 import 'package:easy_poker/src/core/domain/logic/controllers/online_game_controller.dart';
 import 'package:easy_poker/src/core/presentation/notifiers/selected_cards_for_exchange_notifier.dart';
+import 'package:easy_poker/src/core/presentation/view/widgets/game_controls_widget.dart';
+import 'package:easy_poker/src/core/presentation/view/widgets/game_results_widget.dart';
 import 'package:easy_poker/src/core/presentation/view/widgets/hand_widget.dart';
+import 'package:easy_poker/src/core/presentation/view/widgets/waiting_for_players_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../domain/logic/hands/hand.dart';
 
 class OnlineGamePage extends ConsumerStatefulWidget {
   const OnlineGamePage({super.key});
@@ -43,38 +44,37 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
   @override
   Widget build(BuildContext context) {
     if (!_initialized) {
-      return CircularProgressIndicator();
+      return const CircularProgressIndicator();
     }
-    return Column(children: [
-      TextButton(
-          onPressed: ref.read(onlineGameControllerProvider).endCurrentGamePhase,
-          child: Text("end turn")),
-      TextButton(
-          onPressed: () => ref
-              .read(onlineGameControllerProvider)
-              .exchangeCards(ref.read(selectedCardsForExchangeProvider)),
-          child: Text("exchange selected")),
-      _gameBody(ref),
-    ]);
+    return Scaffold(body: _mapStreamToWidget(ref));
   }
 
-  Widget _gameBody(WidgetRef ref) {
+  Widget _mapStreamToWidget(WidgetRef ref) {
     return switch (ref.watch(remoteGameRefSnapshotsProvider)) {
-      AsyncData(:final value) => _getHand(value.data()!),
+      AsyncData(:final value) => _getGameBody(value.data()!),
       AsyncError(:final error) => Text(error.toString()),
       _ => const CircularProgressIndicator(),
     };
   }
 
-  _getHand(Game game) {
+  Widget _getGameBody(Game game) {
+    return Column(
+      children: [
+        GameControls(game.phase, onlineGameControllerProvider),
+        _getHand(game),
+      ],
+    );
+  }
+
+  Widget _getHand(Game game) {
     OnlineGamePhase phase = game.phase as OnlineGamePhase;
     switch (phase) {
       case GameWaitingForPlayer():
-        return Text("GameWaitingForPlayer");
+        return const WaitingForPlayersWidget();
       case OnlineGameRunning():
         return HandWidget(
           selectedCardsForExchangeIndecies:
-              ref.watch(selectedCardsForExchangeProvider),
+              ref.watch(selectedCardsForExchangeProvider).selectedCards,
           cards:
               ref.read(onlineGameControllerProvider).currentActivePlayer!.cards,
           onCardTap: ref
@@ -82,8 +82,7 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
               .selectCardForExchange,
         );
       case GameEndedPhase():
-        return Text(
-            "game results ${phase.winner.id} won because ${Hand(cards: phase.winner.cards).handType.name} is stronger than ${Hand(cards: phase.looser.cards).handType.name}");
+        return GameResultsWidget(phase: phase);
     }
   }
 }
