@@ -9,7 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 StreamProvider<DocumentSnapshot<Game>> remoteGameRefSnapshotsProvider =
     StreamProvider((ref) {
-  return ref.read(remoteGameRefProvider).snapshots();
+  return switch (ref.watch(remoteGameRefProvider)) {
+    AsyncValue<DocumentReference<Game>>(:final value) =>
+      value?.snapshots() ?? const Stream.empty(),
+  };
 });
 
 Provider<OnlineGameController> onlineGameControllerProvider = Provider((ref) =>
@@ -30,7 +33,7 @@ class OnlineGameController extends GameController {
   Game get game => ref.read(remoteGameRefSnapshotsProvider).value!.data()!;
 
   @override
-  set game(Game game) => ref.read(remoteGameRefProvider).set(game);
+  set game(Game game) => ref.read(remoteGameRefProvider).value?.set(game);
 
   @override
   Player? get currentActivePlayer {
