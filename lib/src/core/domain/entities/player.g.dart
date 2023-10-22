@@ -7,7 +7,7 @@ part of 'player.dart';
 // **************************************************************************
 
 _$PlayerImpl _$$PlayerImplFromJson(Map<String, dynamic> json) => _$PlayerImpl(
-      id: json['id'] as int,
+      id: $enumDecode(_$PlayerIdEnumMap, json['id']),
       cards: (json['cards'] as List<dynamic>)
           .map((e) => Card.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -15,6 +15,11 @@ _$PlayerImpl _$$PlayerImplFromJson(Map<String, dynamic> json) => _$PlayerImpl(
 
 Map<String, dynamic> _$$PlayerImplToJson(_$PlayerImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'cards': instance.cards,
+      'id': _$PlayerIdEnumMap[instance.id]!,
+      'cards': instance.cards.map((e) => e.toJson()).toList(),
     };
+
+const _$PlayerIdEnumMap = {
+  PlayerId.p1: 'p1',
+  PlayerId.p2: 'p2',
+};

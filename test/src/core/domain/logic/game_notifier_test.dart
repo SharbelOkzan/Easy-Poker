@@ -1,7 +1,10 @@
-import 'package:easy_poker/src/core/domain/entities/enums/game_status.dart';
+import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
+import 'package:easy_poker/src/core/domain/entities/enums/player_id.dart';
 import 'package:easy_poker/src/core/domain/entities/game.dart';
 import 'package:easy_poker/src/core/domain/entities/player.dart';
+import 'package:easy_poker/src/core/domain/logic/controllers/offline_game_cotroller.dart';
 import 'package:easy_poker/src/core/presentation/notifiers/game_notifier.dart';
+import 'package:easy_poker/src/core/presentation/notifiers/selected_cards_for_exchange_notifier.dart';
 import 'package:easy_poker/src/service_locator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,137 +13,178 @@ import 'package:mockito/mockito.dart';
 
 import '../../../../test_helper.dart';
 
-class Listener extends Mock {
+class GameListener extends Mock {
   void call(Game? previous, Game value) => callMockIgnoreParams();
   void callMockIgnoreParams();
 }
 
+class SelectedCardsListener extends Mock {
+  void call(List<int>? previous, List<int> value) => callMockIgnoreParams();
+  void callMockIgnoreParams();
+}
+
 void main() {
-  test("selecting/unselecting cards notifies listerns", () {
-    configureDependencies();
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
-    final listener = Listener();
+  group('test game presentation logic', () {
+    test("selecting/unselecting cards notifies listeners", () {
+      configureDependencies();
+      final container = ProviderContainer();
+      addTearDown(() {
+        getIt.reset(dispose: false);
+        container.dispose();
+      });
+      final listener = SelectedCardsListener();
 
-    container.listen<Game>(
-      gameProvider,
-      listener.call,
-      fireImmediately: true,
-    );
+      container.listen<List<int>>(
+        selectedCardsForExchangeProvider,
+        listener.call,
+        fireImmediately: true,
+      );
 
-    // the listener is called immediately when a game is provided
-    verify(listener.callMockIgnoreParams()).called(1);
-    verifyNoMoreInteractions(listener);
+      // the listener is called immediately when a game is provided
+      verify(listener.callMockIgnoreParams()).called(1);
+      verifyNoMoreInteractions(listener);
 
-    // select two cards
-    container.read(gameProvider.notifier).selectCardForExchange(0);
-    container.read(gameProvider.notifier).selectCardForExchange(2);
-    verify(listener.callMockIgnoreParams()).called(2);
-    verifyNoMoreInteractions(listener);
-    var listEqulity = listEquals(
-        container.read(gameProvider).selectedCardsForExchangeIndecies,
-        const [0, 2]);
-    expect(listEqulity, true);
+      // select two cards
+      container
+          .read(selectedCardsForExchangeProvider.notifier)
+          .selectCardForExchange(0);
+      container
+          .read(selectedCardsForExchangeProvider.notifier)
+          .selectCardForExchange(2);
+      verify(listener.callMockIgnoreParams()).called(2);
+      verifyNoMoreInteractions(listener);
+      var listEquality = listEquals(
+          container.read(selectedCardsForExchangeProvider), const [0, 2]);
+      expect(listEquality, true);
 
-    // unselect a card
-    container.read(gameProvider.notifier).selectCardForExchange(0);
-    verify(listener.callMockIgnoreParams()).called(1);
-    verifyNoMoreInteractions(listener);
-    listEqulity = listEquals(
-        container.read(gameProvider).selectedCardsForExchangeIndecies,
-        const [2]);
-    expect(listEqulity, true);
-  });
+      // unselect a card
+      container
+          .read(selectedCardsForExchangeProvider.notifier)
+          .selectCardForExchange(0);
+      verify(listener.callMockIgnoreParams()).called(1);
+      verifyNoMoreInteractions(listener);
+      listEquality = listEquals(
+          container.read(selectedCardsForExchangeProvider), const [2]);
+      expect(listEquality, true);
+    });
 
-  test("switching game phases notifies listerns", () {
-    configureDependencies();
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
-    final listener = Listener();
+    test("switching game phases notifies listeners", () {
+      configureDependencies();
+      final container = ProviderContainer();
+      addTearDown(() {
+        getIt.reset(dispose: false);
+        container.dispose();
+      });
+      final listener = GameListener();
 
-    container.listen<Game>(
-      gameProvider,
-      listener.call,
-      fireImmediately: true,
-    );
+      container.listen<Game>(
+        gameNotifierProvider,
+        listener.call,
+        fireImmediately: true,
+      );
 
-    // verify that first player in-turn and their cards are exposed by `cardsToShow`
-    verify(listener.callMockIgnoreParams()).called(1);
-    verifyNoMoreInteractions(listener);
-    expect(container.read(gameProvider).status, isA<GameRunning>());
-    expect((container.read(gameProvider).status as GameRunning).playerInTurnId,
-        equals(1));
-    var listEquality = listEquals(
-        container.read(gameProvider.notifier).cardsToShow,
-        container.read(gameProvider).player1.cards);
-    expect(listEquality, true);
+      // verify that first player in-turn and their cards are exposed by `cardsToShow`
+      verify(listener.callMockIgnoreParams()).called(1);
+      verifyNoMoreInteractions(listener);
+      expect(container.read(gameNotifierProvider).phase,
+          isA<OfflineGameRunning>());
+      expect(
+          (container.read(gameNotifierProvider).phase as OfflineGameRunning)
+              .currentActivePlayerId,
+          equals(PlayerId.p1));
+      var listEquality = listEquals(
+          container
+              .read(offlineGameControllerProvider)
+              .currentActivePlayer
+              ?.cards,
+          container.read(gameNotifierProvider).player1.cards);
+      expect(listEquality, true);
 
-    // end phase
-    container.read(gameProvider.notifier).endPlayerTurn();
+      // end phase
+      container.read(offlineGameControllerProvider).endCurrentGamePhase();
 
-    // verify that no player's cards are exposed
-    verify(listener.callMockIgnoreParams()).called(1);
-    verifyNoMoreInteractions(listener);
-    expect(container.read(gameProvider).status, isA<GameRunning>());
-    expect((container.read(gameProvider).status as GameRunning).playerInTurnId,
-        isNull);
-    listEquality =
-        listEquals(container.read(gameProvider.notifier).cardsToShow, null);
-    expect(listEquality, true);
+      // verify that no player's cards are exposed
+      verify(listener.callMockIgnoreParams()).called(1);
+      verifyNoMoreInteractions(listener);
+      expect(container.read(gameNotifierProvider).phase,
+          isA<OfflineGameRunning>());
+      expect(
+          (container.read(gameNotifierProvider).phase as OfflineGameRunning)
+              .currentActivePlayerId,
+          isNull);
+      listEquality = listEquals(
+          container
+              .read(offlineGameControllerProvider)
+              .currentActivePlayer
+              ?.cards,
+          null);
+      expect(listEquality, true);
 
-    // end phase
-    container.read(gameProvider.notifier).endPlayerTurn();
+      // end phase
+      container.read(offlineGameControllerProvider).endCurrentGamePhase();
 
-    // verify second player in-turn and their cards are exposed by `cardsToShow`
-    verify(listener.callMockIgnoreParams()).called(1);
-    verifyNoMoreInteractions(listener);
-    expect(container.read(gameProvider).status, isA<GameRunning>());
-    expect((container.read(gameProvider).status as GameRunning).playerInTurnId,
-        equals(2));
-    listEquality = listEquals(container.read(gameProvider.notifier).cardsToShow,
-        container.read(gameProvider).player2.cards);
-    expect(listEquality, true);
+      // verify second player in-turn and their cards are exposed by `cardsToShow`
+      verify(listener.callMockIgnoreParams()).called(1);
+      verifyNoMoreInteractions(listener);
 
-    // end phase
-    container.read(gameProvider.notifier).endPlayerTurn();
+      expect(container.read(gameNotifierProvider).phase,
+          isA<OfflineGameRunning>());
+      expect(
+          (container.read(gameNotifierProvider).phase as OfflineGameRunning)
+              .currentActivePlayerId,
+          equals(PlayerId.p2));
+      listEquality = listEquals(
+          container
+              .read(offlineGameControllerProvider)
+              .currentActivePlayer
+              ?.cards,
+          container.read(gameNotifierProvider).player2.cards);
+      expect(listEquality, true);
 
-    // verify that the game has ended
-    verify(listener.callMockIgnoreParams()).called(1);
-    verifyNoMoreInteractions(listener);
-    expect(container.read(gameProvider).status, isA<GameEnded>());
-  });
+      // end phase
+      container.read(offlineGameControllerProvider).endCurrentGamePhase();
 
-  test("full house beats pair", () {
-    configureDependencies();
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
-    final listener = Listener();
+      // verify that the game has ended
+      verify(listener.callMockIgnoreParams()).called(1);
+      verifyNoMoreInteractions(listener);
+      expect(container.read(gameNotifierProvider).phase, isA<GameEndedPhase>());
+    });
 
-    Player player1 = Player(id: 1, cards: TestHelper.fullHouseHand);
-    Player player2 = Player(id: 2, cards: TestHelper.pairHand);
+    test("full house beats pair", () {
+      configureDependencies();
+      final container = ProviderContainer();
+      addTearDown(() {
+        getIt.reset(dispose: false);
+        container.dispose();
+      });
+      final listener = GameListener();
 
-    Game game = Game(
-      deck: [],
-      player1: player1,
-      player2: player2,
-      selectedCardsForExchangeIndecies: [],
-      status: GameRunning(playerInTurnId: 2),
-    );
-    container.read(gameProvider.notifier).state = game;
+      Player player1 = Player(id: PlayerId.p1, cards: TestHelper.fullHouseHand);
+      Player player2 = Player(id: PlayerId.p2, cards: TestHelper.pairHand);
 
-    // start listening after setting up the predefined game
-    container.listen<Game>(
-      gameProvider,
-      listener.call,
-      fireImmediately: true,
-    );
-    verify(listener.callMockIgnoreParams()).called(1);
-    verifyNoMoreInteractions(listener);
+      Game game = Game(
+        deck: [],
+        player1: player1,
+        player2: player2,
+        phase: OfflineGameRunning(currentActivePlayerId: PlayerId.p2),
+      );
+      container.read(gameNotifierProvider.notifier).state = game;
 
-    container.read(gameProvider.notifier).endPlayerTurn();
+      // start listening after setting up the predefined game
+      container.listen<Game>(
+        gameNotifierProvider,
+        listener.call,
+        fireImmediately: true,
+      );
+      verify(listener.callMockIgnoreParams()).called(1);
+      verifyNoMoreInteractions(listener);
 
-    expect(container.read(gameProvider).status, isA<GameEnded>());
-    expect((container.read(gameProvider).status as GameEnded).winner,
-        equals(player1));
+      container.read(offlineGameControllerProvider).endCurrentGamePhase();
+
+      expect(container.read(gameNotifierProvider).phase, isA<GameEndedPhase>());
+      expect(
+          (container.read(gameNotifierProvider).phase as GameEndedPhase).winner,
+          equals(player1));
+    });
   });
 }
