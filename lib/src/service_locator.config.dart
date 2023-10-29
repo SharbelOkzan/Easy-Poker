@@ -10,6 +10,10 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:easy_poker/src/core/domain/logic/usecases/calculate_game_results_usecase.dart'
     as _i3;
+import 'package:easy_poker/src/core/domain/logic/usecases/create_new_game_usecase/create_new_offline_game_usecase.dart'
+    as _i7;
+import 'package:easy_poker/src/core/domain/logic/usecases/create_new_game_usecase/create_new_online_game_usecase.dart'
+    as _i8;
 import 'package:easy_poker/src/core/domain/logic/usecases/draw_card_usecase.dart'
     as _i4;
 import 'package:easy_poker/src/core/domain/logic/usecases/exchange_card_usecase.dart'
@@ -36,6 +40,16 @@ extension GetItInjectableX on _i1.GetIt {
     gh.factory<_i5.ExchangeCardUsecase>(
         () => _i5.ExchangeCardUsecase(gh<_i4.DrawCardUsecase>()));
     gh.factory<_i6.GetShuffledDeckUsecase>(() => _i6.GetShuffledDeckUsecase());
+    gh.factory<_i7.CreateNewOfflineGameUsecase>(
+        () => _i7.CreateNewOfflineGameUsecase(
+              drawCard: gh<_i4.DrawCardUsecase>(),
+              getShuffledDeck: gh<_i6.GetShuffledDeckUsecase>(),
+            ));
+    gh.factory<_i8.CreateNewOnlineGameUsecase>(
+        () => _i8.CreateNewOnlineGameUsecase(
+              drawCard: gh<_i4.DrawCardUsecase>(),
+              getShuffledDeck: gh<_i6.GetShuffledDeckUsecase>(),
+            ));
     return this;
   }
 }

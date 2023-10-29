@@ -1,3 +1,4 @@
+import 'package:easy_poker/src/core/constants/game_constants.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:easy_poker/src/core/presentation/view/widgets/card_widget.dart';
@@ -37,30 +38,11 @@ class HandWidget extends StatelessWidget {
 class _HandLayout extends StatelessWidget {
   const _HandLayout({
     Key? key,
-    required List<Widget> children,
+    required List<CardWidget> children,
   })  : _children = children,
         super(key: key);
 
-  final List<Widget> _children;
-
-  List<Widget> get children => _children
-      .asMap()
-      .map(
-        (index, widget) => MapEntry(
-          index,
-          Transform.translate(
-            offset:
-                Offset((index - 2) * 40, ((index - 2) * 5).abs().toDouble()),
-            child: Transform.rotate(
-              angle: (index - 2) / 10,
-              child: widget,
-            ),
-          ),
-          // ),
-        ),
-      )
-      .values
-      .toList();
+  final List<CardWidget> _children;
 
   @override
   Widget build(BuildContext context) {
@@ -72,5 +54,59 @@ class _HandLayout extends StatelessWidget {
         children: children,
       ),
     );
+  }
+
+  List<Widget> get children {
+    return _children
+        .asMap()
+        .map(
+          (index, widget) => MapEntry(
+            index,
+            Transform.translate(
+              offset: _getCardOffset(index, widget.isSelected),
+              child: Transform.rotate(
+                angle: _getAngle(index),
+                child: widget,
+              ),
+            ),
+          ),
+        )
+        .values
+        .toList();
+  }
+
+  Offset _getCardOffset(int index, bool isSelected) {
+    const double kSelectedCardYOffset = 20;
+    const double kCardXOffsetFactor = 60;
+    const double kCardYOffsetFactor = 1;
+
+    const lastIndex = GameConstants.cardsPerPlayer - 1;
+
+    final int cardsToTheLeft = lastIndex - index;
+    final int cardsToTheRight = index;
+    final int distanceFromCenter = cardsToTheRight - cardsToTheLeft;
+
+    const double cardXOffsetFactor =
+        kCardXOffsetFactor / lastIndex; // more cards -> less X offset
+    final double cardXOffset = distanceFromCenter * cardXOffsetFactor;
+
+    const double cardYOffsetFactor =
+        kCardYOffsetFactor * lastIndex; // more cards -> more Y offset
+    final double cardYOffset = (distanceFromCenter * cardYOffsetFactor).abs();
+
+    return Offset(cardXOffset,
+        isSelected ? cardYOffset - kSelectedCardYOffset : cardYOffset);
+  }
+
+  double _getAngle(int index) {
+    const double rotationFactor = 10;
+
+    const lastIndex = GameConstants.cardsPerPlayer - 1;
+
+    final int cardsToTheLeft = lastIndex - index;
+    final int cardsToTheRight = index;
+    final int distanceFromCenter = cardsToTheRight - cardsToTheLeft;
+
+    return distanceFromCenter / rotationFactor;
   }
 }

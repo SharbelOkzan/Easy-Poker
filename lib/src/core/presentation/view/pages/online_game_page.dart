@@ -21,8 +21,6 @@ class OnlineGamePage extends ConsumerStatefulWidget {
 }
 
 class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
-  bool _initialized = false;
-
   @override
   void deactivate() {
     ref.read(remoteGameRefProvider).value?.delete();
@@ -32,20 +30,14 @@ class OnlineGamePageState extends ConsumerState<OnlineGamePage> {
   @override
   void didChangeDependencies() {
     ref.invalidate(remoteGameRepositoryProvider);
-    ref.invalidate(remoteGameRefProvider);
-    ref.invalidate(remoteGameRefSnapshotsProvider);
     ref.invalidate(selectedCardsForExchangeProvider);
-    ref
-        .read(remoteGameRepositoryProvider)
-        .gameReference
-        .then((_) => setState(() => _initialized = true));
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: _initialized
+        body: !ref.watch(remoteGameRefProvider).isLoading
             ? _mapStreamToWidget(ref)
             : const Center(child: Icon(Icons.cloud_sync)));
   }

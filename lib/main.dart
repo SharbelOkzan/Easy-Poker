@@ -1,4 +1,5 @@
 import 'package:easy_poker/firebase_options.dart';
+import 'package:easy_poker/src/core/presentation/theme/main_theme.dart';
 import 'package:easy_poker/src/core/presentation/view/pages/offline_game_page.dart';
 import 'package:easy_poker/src/core/presentation/view/pages/home_page.dart';
 import 'package:easy_poker/src/core/presentation/view/pages/online_game_page.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
+        theme: defaultTheme,
         onGenerateRoute: _onGenerateRoute,
         home: const Scaffold(
           body: HomePage(),
