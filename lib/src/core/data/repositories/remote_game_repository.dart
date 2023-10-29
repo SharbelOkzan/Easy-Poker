@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_poker/src/core/domain/entities/card.dart';
 import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
 import 'package:easy_poker/src/core/domain/entities/enums/player_id.dart';
 import 'package:easy_poker/src/core/domain/entities/game.dart';
-import 'package:easy_poker/src/core/domain/entities/player.dart';
-import 'package:easy_poker/src/core/domain/logic/usecases/draw_card_usecase.dart';
-import 'package:easy_poker/src/core/domain/logic/usecases/get_shuffled_deck_usecase.dart';
+import 'package:easy_poker/src/core/domain/logic/usecases/create_new_game_usecase/create_new_online_game_usecase.dart';
 import 'package:easy_poker/src/service_locator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,23 +14,19 @@ FutureProvider<DocumentReference<Game>> remoteGameRefProvider =
 Provider<RemoteGameDataRepository> remoteGameRepositoryProvider = Provider(
     (ref) => RemoteGameDataRepository(
         firestore: FirebaseFirestore.instance,
-        drawCard: getIt.get(),
-        getShuffledDeck: getIt.get()));
+        createNewOnlineGame: getIt.get()));
 
 class RemoteGameDataRepository {
-  final FirebaseFirestore _firestore;
-  final GetShuffledDeckUsecase _getShuffledDeck;
-  final DrawCardUsecase _drawCard;
-
   static const String _gameCollectionPath = "games";
+
+  final FirebaseFirestore _firestore;
+  final CreateNewOnlineGameUsecase _createNewOnlineGame;
 
   RemoteGameDataRepository(
       {required FirebaseFirestore firestore,
-      required GetShuffledDeckUsecase getShuffledDeck,
-      required DrawCardUsecase drawCard})
+      required CreateNewOnlineGameUsecase createNewOnlineGame})
       : _firestore = firestore,
-        _getShuffledDeck = getShuffledDeck,
-        _drawCard = drawCard;
+        _createNewOnlineGame = createNewOnlineGame;
 
   PlayerId? _currentPlayerId;
 
@@ -42,12 +35,7 @@ class RemoteGameDataRepository {
   DocumentReference<Game>? _gameReference;
 
   Future<DocumentReference<Game>> get gameReference async {
-    if (_gameReference != null) {
-      return _gameReference!;
-    } else {
-      _gameReference = await _getGameReference();
-      return _gameReference!;
-    }
+    return _gameReference ??= await _getGameReference();
   }
 
   CollectionReference<Game> get _gamesCollectionRef =>
@@ -74,32 +62,7 @@ class RemoteGameDataRepository {
 
   Future<DocumentReference<Game>> _createNewGame() {
     _currentPlayerId = PlayerId.p1;
-    List<Card> deck = _getShuffledDeck();
-    List<Card> player1Cards = [];
-    List<Card> player2Cards = [];
-
-    for (int i = 0; i < 5; i++) {
-      Card drawnCard;
-      (deck, drawnCard) = _drawCard(deck);
-      player1Cards.add(drawnCard);
-    }
-
-    for (int i = 0; i < 5; i++) {
-      Card drawnCard;
-      (deck, drawnCard) = _drawCard(deck);
-      player2Cards.add(drawnCard);
-    }
-
-    final Player self = Player(id: currentPlayerId, cards: player1Cards);
-    final Player dummy = Player(id: PlayerId.p2, cards: player2Cards);
-
-    final Game game = Game(
-      player1: self,
-      player2: dummy,
-      deck: deck,
-      phase: GameWaitingForPlayer(),
-    );
-    return _gamesCollectionRef.add(game);
+    return _gamesCollectionRef.add(_createNewOnlineGame());
   }
 
   Future<DocumentReference<Game>?> _findGameToJoin() async {
