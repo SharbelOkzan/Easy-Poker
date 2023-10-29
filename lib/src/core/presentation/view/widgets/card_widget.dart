@@ -118,7 +118,10 @@ class _CardTitle extends StatelessWidget {
     return Row(
       mainAxisAlignment: _mainAxisAlignment,
       children: [
-        Text(index.displayName),
+        Text(
+          index.displayName,
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
         const SizedBox(width: 4),
         Text(CardSuitIconUtil.getIcon(suit))
       ],
