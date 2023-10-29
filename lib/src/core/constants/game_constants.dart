@@ -10,4 +10,6 @@ class GameConstants {
     HandType.fullHouse,
     HandType.poker,
   ];
+
+  static const int cardsPerPlayer = 5;
 }

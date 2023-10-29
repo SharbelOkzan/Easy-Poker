@@ -1,3 +1,4 @@
+import 'package:easy_poker/src/core/constants/game_constants.dart';
 import 'package:easy_poker/src/core/domain/entities/card.dart';
 import 'package:easy_poker/src/core/domain/entities/enums/game_phase.dart';
 import 'package:easy_poker/src/core/domain/entities/enums/player_id.dart';
@@ -8,8 +9,6 @@ import 'package:easy_poker/src/core/domain/logic/usecases/get_shuffled_deck_usec
 import 'package:easy_poker/src/core/domain/logic/usecases/usecase.dart';
 
 abstract class CreateNewGameUseCase extends NoParamsUseCase<Game> {
-  static const int _numberOfCardsPerPlayer = 5;
-
   final DrawCardUsecase _drawCard;
   final GetShuffledDeckUsecase _getShuffledDeck;
 
@@ -27,12 +26,12 @@ abstract class CreateNewGameUseCase extends NoParamsUseCase<Game> {
     final List<Card> player1Cards = List<Card>.empty(growable: true);
     final List<Card> player2Cards = List<Card>.empty(growable: true);
 
-    for (int i = 0; i < _numberOfCardsPerPlayer; i++) {
+    for (int i = 0; i < GameConstants.cardsPerPlayer; i++) {
       Card drawnCard;
       (deck, drawnCard) = _drawCard(deck);
       player1Cards.add(drawnCard);
     }
-    for (int i = 0; i < _numberOfCardsPerPlayer; i++) {
+    for (int i = 0; i < GameConstants.cardsPerPlayer; i++) {
       Card drawnCard;
       (deck, drawnCard) = _drawCard(deck);
       player2Cards.add(drawnCard);
