@@ -25,39 +25,37 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: _cardWidth,
-          height: _cardHeight,
-          decoration: _getCardDecoration(context),
-          child: Center(
-              child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _CardTitle(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(4.0),
+        width: _cardWidth,
+        height: _cardHeight,
+        decoration: _getCardDecoration(context),
+        child: Center(
+            child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _CardTitle(
+              index: index,
+              suit: suit,
+              placement: _CardTitlePlacement.top,
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: _CardContent(
                 index: index,
                 suit: suit,
-                placement: _CardTitlePlacement.top,
               ),
-              Align(
-                alignment: Alignment.center,
-                child: _CardContent(
-                  index: index,
-                  suit: suit,
-                ),
-              ),
-              _CardTitle(
-                index: index,
-                suit: suit,
-                placement: _CardTitlePlacement.bottom,
-              ),
-            ],
-          )),
-        ),
+            ),
+            _CardTitle(
+              index: index,
+              suit: suit,
+              placement: _CardTitlePlacement.bottom,
+            ),
+          ],
+        )),
       ),
     );
   }
@@ -122,7 +120,7 @@ class _CardTitle extends StatelessWidget {
       children: [
         Text(index.displayName),
         const SizedBox(width: 4),
-        Icon(CardSuitIconUtil.getIcon(suit))
+        Text(CardSuitIconUtil.getIcon(suit))
       ],
     );
   }
@@ -136,17 +134,55 @@ enum _CardTitlePlacement {
 class _CardContent extends StatelessWidget {
   const _CardContent({super.key, required this.index, required this.suit});
 
+  static const _pictures = {
+    CardIndex.king: 'K',
+    CardIndex.queen: 'Q',
+    CardIndex.jack: 'J',
+  };
   final CardIndex index;
   final CardSuit suit;
 
   @override
   Widget build(BuildContext context) {
+    if (index == CardIndex.ace) {
+      return _fillWithAceIcon(context);
+    }
+    if (_pictures.containsKey(index)) {
+      return _fillWithPicture(context);
+    }
+    return _fillWithSuitIcon(context);
+  }
+
+  Wrap _fillWithSuitIcon(BuildContext context) {
     return Wrap(
       alignment: WrapAlignment.spaceAround,
       children: [
         for (int i = 0; i < index.value; i++)
-          Icon(CardSuitIconUtil.getIcon(suit))
+          Text(CardSuitIconUtil.getIcon(suit),
+              style: TextStyle(
+                  fontSize: 20, color: Theme.of(context).colorScheme.onSurface))
       ],
+    );
+  }
+
+  Widget _fillWithPicture(BuildContext context) {
+    return Text(
+      _pictures[index]!,
+      style: TextStyle(
+        fontSize: 60,
+        color: Theme.of(context).colorScheme.onSurface,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget _fillWithAceIcon(BuildContext context) {
+    return Text(
+      CardSuitIconUtil.getIcon(suit),
+      style: TextStyle(
+        fontSize: 60,
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
     );
   }
 }
