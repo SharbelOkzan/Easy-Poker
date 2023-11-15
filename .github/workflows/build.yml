@@ -11,8 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: get Flutter
-      uses: jddeep/Flutter-Runner@56254d611d8b799e297ab6f81ab4ec5dd0d128a2
+    - uses: jddeep/Flutter-Runner@56254d611d8b799e297ab6f81ab4ec5dd0d128a2
     - name: build app
       
       run: |
