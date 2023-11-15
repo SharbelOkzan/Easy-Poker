@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: get Flutter
-      uses: techno-disaster/Flutter-Mate@v1.0.0
+      uses: jddeep/Flutter-Runner@56254d611d8b799e297ab6f81ab4ec5dd0d128a2
     - name: build app
       
       run: |
