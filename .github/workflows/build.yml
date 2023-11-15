@@ -1,0 +1,28 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: flutter_build
+
+on:
+  workflow_dispatch:
+    
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: get Flutter
+      uses: techno-disaster/Flutter-Mate@v1.0.0
+    - name: build app
+      
+      run: |
+        echo "build started"
+        &&
+        flutter pub get
+        &&
+        flutter build web
+        &&
+        echo "build done!"
+        
+        
+      
