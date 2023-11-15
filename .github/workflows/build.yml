@@ -1,6 +1,3 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
 name: flutter_build
 
 on:
@@ -9,11 +6,12 @@ on:
 jobs:
 
   build:
+    name: get flutter and build
     runs-on: ubuntu-latest
     steps:
-    - uses: jddeep/Flutter-Runner@56254d611d8b799e297ab6f81ab4ec5dd0d128a2
+    - name: whatever 
+      uses: jddeep/Flutter-Runner@56254d611d8b799e297ab6f81ab4ec5dd0d128a2
     - name: build app
-      
       run: |
         echo "build started"
         &&
