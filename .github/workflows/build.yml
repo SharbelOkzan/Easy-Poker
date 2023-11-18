@@ -7,10 +7,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: flutter-cli-test-changing-name
+    - name: use flutter
       uses: steebchen/flutter@v1.1.0
-    - name: test
-      run: echo "test"
+    - name: build web app
+      run: |
+          flutter pub get
+          &&
+          flutter build web
+        
                 
         
       
