@@ -7,8 +7,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: depend on flutter 
-      uses: jddeep/Flutter-Runner@56254d611d8b799e297ab6f81ab4ec5dd0d128a2
+    - name: flutter-cli 
+      uses: steebchen/flutter@v1.1.0
     - name: test
       run: echo "test"
                 
